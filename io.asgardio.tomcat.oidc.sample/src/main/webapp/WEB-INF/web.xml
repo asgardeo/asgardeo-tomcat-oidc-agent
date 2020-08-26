@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SampleApp"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <display-name>oidc-sample-app</display-name>
+
+    <servlet>
+        <servlet-name>OAuth2ClientServlet</servlet-name>
+        <servlet-class>io.asgardio.tomcat.oidc.agent.OIDCCallbackResponseHandler</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OAuth2ClientServlet</servlet-name>
+        <url-pattern>/oauth2client</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OAuth2LogoutServlet</servlet-name>
+        <servlet-class>io.asgardio.tomcat.oidc.agent.LogoutServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OAuth2LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAuthorizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>io.asgardio.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>app-property-file</param-name>
+        <param-value>oidc-sample-app.properties</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>io.asgardio.tomcat.oidc.agent.JKSLoader</listener-class>
+    </listener>
+    <context-param>
+        <param-name>jks-property-file</param-name>
+        <param-value>jks.properties</param-value>
+    </context-param>
+</web-app>

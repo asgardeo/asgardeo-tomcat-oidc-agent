@@ -119,6 +119,8 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         final String authzCode = request.getParameter("code");
 //      Use  AuthorizationResponse authorizationResponse
+        request.getSession()
+                .setAttribute(SSOAgentConstants.SESSION_STATE, request.getParameter(SSOAgentConstants.SESSION_STATE));
 
         TokenRequest tokenRequest = getTokenRequest(properties, authzCode);
         TokenResponse tokenResponse = getTokenResponse(tokenRequest);

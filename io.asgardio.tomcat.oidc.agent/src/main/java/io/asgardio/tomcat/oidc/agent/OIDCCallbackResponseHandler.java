@@ -31,11 +31,10 @@ import com.nimbusds.oauth2.sdk.auth.ClientAuthentication;
 import com.nimbusds.oauth2.sdk.auth.ClientSecretBasic;
 import com.nimbusds.oauth2.sdk.auth.Secret;
 import com.nimbusds.oauth2.sdk.id.ClientID;
-import io.asgardio.java.oidc.sdk.bean.TokenData;
+import com.nimbusds.oauth2.sdk.token.AccessToken;
 import io.asgardio.java.oidc.sdk.bean.User;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentServerException;
-import io.asgardio.java.oidc.sdk.util.CommonUtils;
 import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -46,17 +45,12 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
-import java.util.UUID;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import static io.asgardio.java.oidc.sdk.util.CommonUtils.getAppIdCookie;
 
 /**
  * A servlet class to handle OIDC callback responses.
@@ -79,73 +73,111 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
             throws IOException {
 
         Properties properties = SSOAgentContextEventListener.getProperties();
-        String indexPage;
 
-        // Error response from IDP
         if (isError(request)) {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
-            handleAppIdCookieForLogout(request, response);
-            indexPage = getIndexPage(session, properties);
-            response.sendRedirect(indexPage);
-            return;
-        }
-
-        // Create the initial session
-        if (request.getSession(false) == null) {
-            request.getSession(true);
-        }
-        indexPage = getIndexPage(request.getSession(false), properties);
-
-        // Validate callback properties
-        if (isLogout(request)) {
-            CommonUtils.logout(request, response);
-            response.sendRedirect(indexPage);
-            return;
-        }
-
-        // Obtain and store session_state against this session
-        request.getSession(false)
-                .setAttribute(SSOAgentConstants.SESSION_STATE, request.getParameter(SSOAgentConstants.SESSION_STATE));
-
-        if (isLogin(request)) {
+            clearSession(request);
+            response.sendRedirect(getIndexPage(request, properties));
+        } else if (isLogout(request)) {
+            clearSession(request);
+            response.sendRedirect(getIndexPage(request, properties));
+        } else if (isAuthorizationCodeResponse(request)) {
             try {
-                // Obtain token response
-                getToken(request, response);
-                response.sendRedirect("home.jsp");
+                boolean isAuthenticated = handleAuthentication(request, response);
+                if (isAuthenticated) {
+                    response.sendRedirect("home.jsp"); //TODO: target page
+                } else {
+                    request.getSession().invalidate();
+                    // redirect to index TODO error.jsp
+                    response.sendRedirect(getIndexPage(request, properties));
+                }
             } catch (SSOAgentServerException | SSOAgentClientException e) {
-                response.sendRedirect(indexPage);
+                response.sendRedirect(getIndexPage(request, properties));
             }
+        } else {
+            //log: invalid scenario
+            clearSession(request);
+            response.sendRedirect(getIndexPage(request, properties));
         }
     }
 
-    private void getToken(final HttpServletRequest request, final HttpServletResponse response)
-            throws SSOAgentServerException, SSOAgentClientException, IOException {
+    private void clearSession(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-        if (!checkOAuth(request)) {
+        if (session != null) {
             session.invalidate();
-            session = request.getSession();
         }
-        final Optional<Cookie> appIdCookie = getAppIdCookie(request);
-        final Properties properties = SSOAgentContextEventListener.getProperties();
-        final TokenData storedTokenData;
+    }
 
-        if (appIdCookie.isPresent()) {
-            storedTokenData = CommonUtils.TOKEN_STORE.get(appIdCookie.get().getValue());
-            if (storedTokenData != null) {
-                setTokenDataToSession(session, storedTokenData);
-                return;
-            }
-        }
+    private boolean handleAuthentication(final HttpServletRequest request, final HttpServletResponse response)
+            throws SSOAgentServerException, SSOAgentClientException, IOException {
+
+        HttpSession session = request.getSession();
+        session.invalidate();
+        session = request.getSession();
+
+        final Properties properties = SSOAgentContextEventListener.getProperties();
 
         final String authzCode = request.getParameter("code");
+//      Use  AuthorizationResponse authorizationResponse
 
-        if (authzCode == null) {
-            throw new SSOAgentServerException("Authorization code not present in callback");
+        TokenRequest tokenRequest = getTokenRequest(properties, authzCode);
+        TokenResponse tokenResponse = getTokenResponse(tokenRequest);
+
+        if (!tokenResponse.indicatesSuccess()) {
+            handleErrorTokenResponse(tokenRequest, tokenResponse);
+            return false;
+        } else {
+            handleSuccessTokenResponse(session, tokenResponse);
+            return true;
         }
+    }
+
+    private void handleSuccessTokenResponse(HttpSession session, TokenResponse tokenResponse)
+            throws SSOAgentServerException {
+
+        AccessTokenResponse successResponse = tokenResponse.toSuccessResponse();
+        AccessToken accessToken = successResponse.getTokens().getAccessToken();
+
+        session.setAttribute("accessToken", accessToken); //use constants
+        String idToken = successResponse.getCustomParameters().get("id_token").toString(); // parse to JWT
+
+        if (idToken == null) {
+            throw new SSOAgentServerException("null id token"); //TODO log
+        }
+        //TODO validate IdToken (Signature, ref. spec)
+        try {
+            JWTClaimsSet claimsSet = SignedJWT.parse(idToken).getJWTClaimsSet();
+            User user = new User(claimsSet.getSubject(), getUserAttributes(idToken));
+            session.setAttribute("idToken", idToken);
+            session.setAttribute("user", user);
+            session.setAttribute("authenticated", true);
+        } catch (ParseException e) {
+            throw new SSOAgentServerException("Error while parsing id_token.");
+        }
+    }
+
+    private void handleErrorTokenResponse(TokenRequest tokenRequest, TokenResponse tokenResponse) {
+
+        TokenErrorResponse errorResponse = tokenResponse.toErrorResponse();
+        JSONObject requestObject = requestToJson(tokenRequest);
+        JSONObject responseObject = errorResponse.toJSONObject();
+        //log requestObject, responseObject
+    }
+
+    private TokenResponse getTokenResponse(TokenRequest tokenRequest) {
+
+        TokenResponse tokenResponse = null;
+        try {
+            tokenResponse = TokenResponse.parse(tokenRequest.toHTTPRequest().send());
+        } catch (com.nimbusds.oauth2.sdk.ParseException e) {
+            e.printStackTrace(); //TODO
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tokenResponse;
+    }
+
+    private TokenRequest getTokenRequest(Properties properties, String authzCode) throws SSOAgentClientException {
 
         AuthorizationCode authorizationCode = new AuthorizationCode(authzCode);
         URI callbackURI;
@@ -165,78 +197,12 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
             throw new SSOAgentClientException("token endpoint URL is not configured.");
         }
 
-        TokenRequest tokenRequest = new TokenRequest(tokenEndpoint, clientAuthentication, authorizationGrant);
-        TokenResponse tokenResponse = null;
-        try {
-            tokenResponse = TokenResponse.parse(tokenRequest.toHTTPRequest().send());
-        } catch (com.nimbusds.oauth2.sdk.ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JSONObject requestObject = requestToJson(tokenRequest);
-        JSONObject responseObject;
-
-        if (!tokenResponse.indicatesSuccess()) {
-            TokenErrorResponse errorResponse = tokenResponse.toErrorResponse();
-            responseObject = errorResponse.toJSONObject();
-            session.setAttribute("requestObject", requestObject);
-            session.setAttribute("responseObject", responseObject);
-            session.invalidate();
-            response.sendRedirect("./");
-        } else {
-            AccessTokenResponse successResponse = tokenResponse.toSuccessResponse();
-            responseObject = successResponse.toJSONObject();
-            final String accessToken = successResponse.getTokens().getAccessToken().toString();
-
-            session.setAttribute("requestObject", requestObject);
-            session.setAttribute("responseObject", responseObject);
-            if (accessToken != null) {
-                session.setAttribute("accessToken", accessToken);
-                String idToken = successResponse.getCustomParameters().get("id_token").toString();
-
-                if (idToken != null) {
-                    try {
-                        JWTClaimsSet claimsSet = SignedJWT.parse(idToken).getJWTClaimsSet();
-                        User user = new User(claimsSet.getSubject(), getUserAttributes(idToken));
-                        session.setAttribute("idToken", idToken);
-                        session.setAttribute("user", user);
-                    } catch (ParseException e) {
-                        throw new SSOAgentServerException("Error while parsing id_token.");
-                    }
-                }
-                session.setAttribute("authenticated", true);
-
-                TokenData tokenData = new TokenData();
-                tokenData.setAccessToken(accessToken);
-                tokenData.setIdToken(idToken);
-
-                final String sessionId = UUID.randomUUID().toString();
-                CommonUtils.TOKEN_STORE.put(sessionId, tokenData);
-                final Cookie cookie = new Cookie("AppID", sessionId);
-                cookie.setMaxAge(-1);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-            } else {
-                session.invalidate();
-            }
-        }
-    }
-
-    private void handleAppIdCookieForLogout(HttpServletRequest request, HttpServletResponse response) {
-
-        Optional<Cookie> appIdCookie = getAppIdCookie(request);
-
-        if (appIdCookie.isPresent()) {
-            CommonUtils.TOKEN_STORE.remove(appIdCookie.get().getValue());
-            appIdCookie.get().setMaxAge(0);
-            response.addCookie(appIdCookie.get());
-        }
+        return new TokenRequest(tokenEndpoint, clientAuthentication, authorizationGrant);
     }
 
     private boolean isLogout(HttpServletRequest request) {
 
-        if (request.getParameterMap().isEmpty()) {
+        if (request.getParameterMap().isEmpty()) { //TODO: revise
             return true;
         }
         if (request.getParameterMap().containsKey("sp") &&
@@ -272,7 +238,7 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         return userClaimValueMap;
     }
 
-    private boolean isLogin(HttpServletRequest request) {
+    private boolean isAuthorizationCodeResponse(HttpServletRequest request) {
 
         String authzCode = request.getParameter("code");
         return StringUtils.isNotBlank(authzCode);
@@ -284,30 +250,12 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         return StringUtils.isNotBlank(error);
     }
 
-    private boolean checkOAuth(final HttpServletRequest request) {
-
-        final HttpSession currentSession = request.getSession(false);
-
-        return currentSession != null
-                && currentSession.getAttribute("authenticated") != null
-                && (boolean) currentSession.getAttribute("authenticated");
-    }
-
-    private void setTokenDataToSession(final HttpSession session, final TokenData storedTokenData) {
-
-        session.setAttribute("authenticated", true);
-        session.setAttribute("accessToken", storedTokenData.getAccessToken());
-        session.setAttribute("idToken", storedTokenData.getIdToken());
-    }
-
-    private String getIndexPage(HttpSession session, Properties properties) {
+    private String getIndexPage(HttpServletRequest request, Properties properties) { //TODO: mv to Util
 
         if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
             return properties.getProperty(SSOAgentConstants.INDEX_PAGE);
-        } else if (session != null) {
-            return session.getServletContext().getContextPath();
         } else {
-            return "./";
+            return request.getContextPath(); //TODO: verify whether context url string is returned
         }
     }
 }

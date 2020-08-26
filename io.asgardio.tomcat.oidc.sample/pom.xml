@@ -36,6 +36,13 @@
     </description>
     <url>http://asgardio.io</url>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.asgardio.tomcat.oidc.agent</groupId>
+            <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>oidc-sample-app</finalName>
         <sourceDirectory>src/main</sourceDirectory>
@@ -77,11 +84,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-            <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-        </dependency>
-    </dependencies>
 </project>

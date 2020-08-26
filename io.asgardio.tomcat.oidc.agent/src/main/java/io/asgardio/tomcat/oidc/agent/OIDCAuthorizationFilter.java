@@ -18,7 +18,6 @@
 
 package io.asgardio.tomcat.oidc.agent;
 
-import com.nimbusds.common.contenttype.ContentType;
 import com.nimbusds.oauth2.sdk.AuthorizationRequest;
 import com.nimbusds.oauth2.sdk.ResponseType;
 import com.nimbusds.oauth2.sdk.Scope;
@@ -65,20 +64,21 @@ public class OIDCAuthorizationFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        HttpSession session = request.getSession(false);
+        HttpServletResponse response = (HttpServletResponse) servletResponse; //TODO: use servlet request class
+
         Properties properties = SSOAgentContextEventListener.getProperties();
 
-        if (isURLtoSkip(request, properties)) {
+        if (isURLtoSkip(request, properties) || isAuthenticated(request)) {
             filterChain.doFilter(request, response);
-            return;
-        }
-
-        if (session == null || session.getAttribute("authenticated") == null) {
-            session = request.getSession();
-            sendAuthzRequest(response, session, properties);
         } else {
-            filterChain.doFilter(request, response);
+            try {
+                AuthorizationRequest authorizationRequest = buildAuthorizationRequest(properties);
+                response.sendRedirect(authorizationRequest.toURI().toString());
+            } catch (URISyntaxException exception) {
+                log.error(exception.getMessage(), exception);
+                String indexPage = getIndexPage(request, properties);
+                response.sendRedirect(indexPage);
+            }
         }
     }
 
@@ -87,53 +87,29 @@ public class OIDCAuthorizationFilter implements Filter {
 
     }
 
-    private void sendAuthzRequest(HttpServletResponse response, HttpSession session, Properties properties)
-            throws IOException {
+    private AuthorizationRequest buildAuthorizationRequest(Properties properties)
+            throws URISyntaxException {
 
         String consumerKey = properties.getProperty(SSOAgentConstants.CONSUMER_KEY);
         String authzEndpoint = properties.getProperty(SSOAgentConstants.OAUTH2_AUTHZ_ENDPOINT);
-        String authzGrantType = properties.getProperty(SSOAgentConstants.OAUTH2_GRANT_TYPE);
         String scope = properties.getProperty(SSOAgentConstants.SCOPE);
         String callBackUrl = properties.getProperty(SSOAgentConstants.CALL_BACK_URL);
-        String logoutEndpoint = properties.getProperty(SSOAgentConstants.OIDC_LOGOUT_ENDPOINT);
-        String sessionIFrameEndpoint = properties.getProperty(SSOAgentConstants.OIDC_SESSION_IFRAME_ENDPOINT);
 
         ResponseType responseType = new ResponseType(ResponseType.Value.CODE);
         ClientID clientID = new ClientID(consumerKey);
         Scope authScope = new Scope(scope);
-        URI callBackURI = validateURI(session, response, properties, callBackUrl);
-        URI authorizationEndpoint = validateURI(session, response, properties, authzEndpoint);
-        ContentType contentType = ContentType.APPLICATION_JSON;
-
-        session.setAttribute(SSOAgentConstants.OAUTH2_GRANT_TYPE, authzGrantType);
-        session.setAttribute(SSOAgentConstants.CONSUMER_KEY, consumerKey);
-        session.setAttribute(SSOAgentConstants.SCOPE, scope);
-        session.setAttribute(SSOAgentConstants.CALL_BACK_URL, callBackUrl);
-        session.setAttribute(SSOAgentConstants.OAUTH2_AUTHZ_ENDPOINT, authzEndpoint);
-        session.setAttribute(SSOAgentConstants.OIDC_LOGOUT_ENDPOINT, logoutEndpoint);
-        session.setAttribute(SSOAgentConstants.OIDC_SESSION_IFRAME_ENDPOINT, sessionIFrameEndpoint);
+        URI callBackURI = new URI(callBackUrl);
+        URI authorizationEndpoint = new URI(authzEndpoint);
+//        ContentType contentType = ContentType.APPLICATION_JSON;
 
         AuthorizationRequest authzRequest = new AuthorizationRequest.Builder(responseType, clientID)
                 .scope(authScope)
                 .redirectionURI(callBackURI)
                 .endpointURI(authorizationEndpoint)
                 .build();
-        response.setContentType(contentType.getType());
-        response.sendRedirect(authzRequest.toURI().toString());
-    }
+//        response.setContentType(contentType.getType());
+        return authzRequest;
 
-    private URI validateURI(HttpSession session, HttpServletResponse response, Properties properties, String url)
-            throws IOException {
-
-        URI uri = null;
-        try {
-            uri = new URI(url);
-        } catch (URISyntaxException e) {
-            log.error(String.format("Error in parsing the URI for %s.", url), e);
-            String indexPage = getIndexPage(session, properties);
-            response.sendRedirect(indexPage);
-        }
-        return uri;
     }
 
     private boolean isURLtoSkip(HttpServletRequest request, Properties properties) {
@@ -158,14 +134,21 @@ public class OIDCAuthorizationFilter implements Filter {
         return skipURIs;
     }
 
-    private String getIndexPage(HttpSession session, Properties properties) {
+    private String getIndexPage(HttpServletRequest request, Properties properties) { //TODO: mv to Util
 
         if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
             return properties.getProperty(SSOAgentConstants.INDEX_PAGE);
-        } else if (session != null) {
-            return session.getServletContext().getContextPath();
         } else {
-            return "./";
+            return request.getContextPath(); //TODO: verify whether context url string is returned
         }
+    }
+
+    private boolean isAuthenticated(final HttpServletRequest request) { //TODO: mv to Util
+
+        final HttpSession currentSession = request.getSession(false);
+
+        return currentSession != null
+                && currentSession.getAttribute("authenticated") != null
+                && (boolean) currentSession.getAttribute("authenticated");
     }
 }

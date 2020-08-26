@@ -34,11 +34,12 @@ import javax.servlet.ServletContextListener;
 /**
  * Used to find and set JKS required for IS server communication.
  */
+//comprehensive comments: ref: oracle guide
 public class JKSLoader implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
+        //Logger log4j2
         // First find jks properties
         try {
             ServletContext servletContext = servletContextEvent.getServletContext();
@@ -63,14 +64,16 @@ public class JKSLoader implements ServletContextListener {
             // Find and set JKS required for IS server communication
             final URL resource =
                     this.getClass().getClassLoader().getResource(jksProperties.getProperty("keystorename"));
+            //use constant
 
             if (resource != null) {
+                //TODO (configuration with two trust stores)
                 System.setProperty("javax.net.ssl.trustStore", resource.getPath());
                 System.setProperty("javax.net.ssl.trustStorePassword", jksProperties.getProperty("keystorepassword"));
             }
 
         } catch (IOException | SSOAgentClientException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //TODO
             return;
         }
     }

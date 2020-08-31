@@ -24,7 +24,7 @@
 
 <%
     final HttpSession currentSession = request.getSession(false);
-    final String idToken = (String) currentSession.getAttribute("idToken");
+    final String idToken = (String) currentSession.getAttribute("id_token");
     
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();

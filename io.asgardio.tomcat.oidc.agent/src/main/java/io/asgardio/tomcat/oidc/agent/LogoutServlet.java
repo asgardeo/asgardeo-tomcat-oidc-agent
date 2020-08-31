@@ -62,7 +62,7 @@ public class LogoutServlet extends HttpServlet {
         HttpSession currentSession = req.getSession(false);
         LogoutRequest logoutRequest = getLogoutRequest(currentSession);
 
-        logger.log(Level.INFO, "Invalidate the session in the client side upon RP-Initiated logout.");
+        logger.log(Level.INFO, "Invalidating the session in the client side upon RP-Initiated logout.");
         currentSession.invalidate();
 
         resp.sendRedirect(logoutRequest.toURI().toString());

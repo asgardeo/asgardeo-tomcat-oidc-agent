@@ -20,16 +20,21 @@ package io.asgardio.tomcat.oidc.agent;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.oauth2.sdk.AbstractRequest;
 import com.nimbusds.oauth2.sdk.AccessTokenResponse;
 import com.nimbusds.oauth2.sdk.AuthorizationCode;
 import com.nimbusds.oauth2.sdk.AuthorizationCodeGrant;
+import com.nimbusds.oauth2.sdk.AuthorizationErrorResponse;
 import com.nimbusds.oauth2.sdk.AuthorizationGrant;
+import com.nimbusds.oauth2.sdk.AuthorizationResponse;
+import com.nimbusds.oauth2.sdk.AuthorizationSuccessResponse;
 import com.nimbusds.oauth2.sdk.TokenErrorResponse;
 import com.nimbusds.oauth2.sdk.TokenRequest;
 import com.nimbusds.oauth2.sdk.TokenResponse;
 import com.nimbusds.oauth2.sdk.auth.ClientAuthentication;
 import com.nimbusds.oauth2.sdk.auth.ClientSecretBasic;
 import com.nimbusds.oauth2.sdk.auth.Secret;
+import com.nimbusds.oauth2.sdk.http.ServletUtils;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import io.asgardio.java.oidc.sdk.SSOAgentConstants;
@@ -124,18 +129,35 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         final Properties properties = SSOAgentContextEventListener.getProperties();
 
-        final String authzCode = request.getParameter("code");
-//      Use  AuthorizationResponse authorizationResponse
+        AuthorizationResponse authorizationResponse;
+        AuthorizationCode authorizationCode;
+        AuthorizationSuccessResponse successResponse;
+        TokenRequest tokenRequest;
+        TokenResponse tokenResponse;
 
-        TokenRequest tokenRequest = getTokenRequest(properties, authzCode);
-        TokenResponse tokenResponse = getTokenResponse(tokenRequest);
+        try {
+            authorizationResponse = AuthorizationResponse.parse(ServletUtils.createHTTPRequest(request));
 
-        if (!tokenResponse.indicatesSuccess()) {
-            handleErrorTokenResponse(tokenRequest, tokenResponse);
+            if (!authorizationResponse.indicatesSuccess()) {
+                handleErrorAuthorizationResponse(authorizationResponse);
+                return false;
+            } else {
+                successResponse = authorizationResponse.toSuccessResponse();
+                authorizationCode = successResponse.getAuthorizationCode();
+            }
+            tokenRequest = getTokenRequest(properties, authorizationCode);
+            tokenResponse = getTokenResponse(tokenRequest);
+
+            if (!tokenResponse.indicatesSuccess()) {
+                handleErrorTokenResponse(tokenRequest, tokenResponse);
+                return false;
+            } else {
+                handleSuccessTokenResponse(session, tokenResponse);
+                return true;
+            }
+        } catch (com.nimbusds.oauth2.sdk.ParseException e) {
+            logger.error(e.getMessage(), e);
             return false;
-        } else {
-            handleSuccessTokenResponse(session, tokenResponse);
-            return true;
         }
     }
 
@@ -157,9 +179,9 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         try {
             JWTClaimsSet claimsSet = SignedJWT.parse(idToken).getJWTClaimsSet();
             User user = new User(claimsSet.getSubject(), getUserAttributes(idToken));
-            session.setAttribute("id_token", idToken);
-            session.setAttribute("user", user);
-            session.setAttribute("authenticated", true);
+            session.setAttribute(SSOAgentConstants.ID_TOKEN, idToken);
+            session.setAttribute(SSOAgentConstants.USER, user);
+            session.setAttribute(SSOAgentConstants.AUTHENTICATED, true);
         } catch (ParseException e) {
             throw new SSOAgentServerException("Error while parsing id_token.");
         }
@@ -174,6 +196,13 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         logger.log(Level.INFO, "Error response object: ", responseObject);
     }
 
+    private void handleErrorAuthorizationResponse(AuthorizationResponse authzResponse) {
+
+        AuthorizationErrorResponse errorResponse = authzResponse.toErrorResponse();
+        JSONObject responseObject = errorResponse.getErrorObject().toJSONObject();
+        logger.log(Level.INFO, "Error response object: ", responseObject);
+    }
+
     private TokenResponse getTokenResponse(TokenRequest tokenRequest) {
 
         TokenResponse tokenResponse = null;
@@ -185,9 +214,9 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         return tokenResponse;
     }
 
-    private TokenRequest getTokenRequest(Properties properties, String authzCode) throws SSOAgentClientException {
+    private TokenRequest getTokenRequest(Properties properties, AuthorizationCode authorizationCode)
+            throws SSOAgentClientException {
 
-        AuthorizationCode authorizationCode = new AuthorizationCode(authzCode);
         URI callbackURI;
         try {
             callbackURI = new URI(properties.getProperty(SSOAgentConstants.CALL_BACK_URL));
@@ -220,11 +249,11 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         return false;
     }
 
-    private JSONObject requestToJson(TokenRequest tokenRequest) {
+    private JSONObject requestToJson(AbstractRequest request) {
 
         JSONObject obj = new JSONObject();
-        obj.appendField("tokenEndpoint", tokenRequest.toHTTPRequest().getURI().toString());
-        obj.appendField("request body", tokenRequest.toHTTPRequest().getQueryParameters());
+        obj.appendField("tokenEndpoint", request.toHTTPRequest().getURI().toString());
+        obj.appendField("request body", request.toHTTPRequest().getQueryParameters());
         return obj;
     }
 
@@ -248,8 +277,18 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
     private boolean isAuthorizationCodeResponse(HttpServletRequest request) {
 
-        String authzCode = request.getParameter("code");
-        return StringUtils.isNotBlank(authzCode);
+        AuthorizationResponse authorizationResponse;
+        try {
+            authorizationResponse = AuthorizationResponse.parse(ServletUtils.createHTTPRequest(request));
+        } catch (com.nimbusds.oauth2.sdk.ParseException | IOException e) {
+            logger.log(Level.ERROR, "Error occurred while parsing the authorization response.", e);
+            return false;
+        }
+        if (!authorizationResponse.indicatesSuccess()) {
+            handleErrorAuthorizationResponse(authorizationResponse);
+            return false;
+        }
+        return true;
     }
 
     private boolean isError(HttpServletRequest request) {

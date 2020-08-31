@@ -66,7 +66,7 @@ public class OIDCAuthorizationFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse; //TODO: use servlet request class
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         Properties properties = SSOAgentContextEventListener.getProperties();
 
@@ -76,8 +76,8 @@ public class OIDCAuthorizationFilter implements Filter {
             try {
                 AuthorizationRequest authorizationRequest = buildAuthorizationRequest(properties);
                 response.sendRedirect(authorizationRequest.toURI().toString());
-            } catch (URISyntaxException exception) {
-                logger.error(exception.getMessage(), exception);
+            } catch (URISyntaxException e) {
+                logger.error(e.getMessage(), e);
                 String indexPage = getIndexPage(request, properties);
                 response.sendRedirect(indexPage);
             }

@@ -22,10 +22,10 @@ import com.nimbusds.oauth2.sdk.AuthorizationRequest;
 import com.nimbusds.oauth2.sdk.ResponseType;
 import com.nimbusds.oauth2.sdk.Scope;
 import com.nimbusds.oauth2.sdk.id.ClientID;
-import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -42,14 +42,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import static io.asgardio.tomcat.oidc.agent.util.Utils.getIndexPage;
+import static io.asgardio.tomcat.oidc.agent.util.Utils.isAuthenticated;
 
 /**
  * A Filter class used to check sessions and secure pages.
  */
 public class OIDCAuthorizationFilter implements Filter {
 
-    private static final Log log = LogFactory.getLog(OIDCAuthorizationFilter.class);
+    private static final Logger logger = LogManager.getLogger(OIDCAuthorizationFilter.class);
 
     protected FilterConfig filterConfig = null;
 
@@ -75,7 +77,7 @@ public class OIDCAuthorizationFilter implements Filter {
                 AuthorizationRequest authorizationRequest = buildAuthorizationRequest(properties);
                 response.sendRedirect(authorizationRequest.toURI().toString());
             } catch (URISyntaxException exception) {
-                log.error(exception.getMessage(), exception);
+                logger.error(exception.getMessage(), exception);
                 String indexPage = getIndexPage(request, properties);
                 response.sendRedirect(indexPage);
             }
@@ -100,14 +102,12 @@ public class OIDCAuthorizationFilter implements Filter {
         Scope authScope = new Scope(scope);
         URI callBackURI = new URI(callBackUrl);
         URI authorizationEndpoint = new URI(authzEndpoint);
-//        ContentType contentType = ContentType.APPLICATION_JSON;
 
         AuthorizationRequest authzRequest = new AuthorizationRequest.Builder(responseType, clientID)
                 .scope(authScope)
                 .redirectionURI(callBackURI)
                 .endpointURI(authorizationEndpoint)
                 .build();
-//        response.setContentType(contentType.getType());
         return authzRequest;
 
     }
@@ -132,23 +132,5 @@ public class OIDCAuthorizationFilter implements Filter {
             skipURIs.add(properties.getProperty(SSOAgentConstants.INDEX_PAGE));
         }
         return skipURIs;
-    }
-
-    private String getIndexPage(HttpServletRequest request, Properties properties) { //TODO: mv to Util
-
-        if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
-            return properties.getProperty(SSOAgentConstants.INDEX_PAGE);
-        } else {
-            return request.getContextPath(); //TODO: verify whether context url string is returned
-        }
-    }
-
-    private boolean isAuthenticated(final HttpServletRequest request) { //TODO: mv to Util
-
-        final HttpSession currentSession = request.getSession(false);
-
-        return currentSession != null
-                && currentSession.getAttribute("authenticated") != null
-                && (boolean) currentSession.getAttribute("authenticated");
     }
 }

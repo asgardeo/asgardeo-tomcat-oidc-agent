@@ -32,12 +32,15 @@ import com.nimbusds.oauth2.sdk.auth.ClientSecretBasic;
 import com.nimbusds.oauth2.sdk.auth.Secret;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
 import io.asgardio.java.oidc.sdk.bean.User;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentServerException;
-import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -52,10 +55,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static io.asgardio.tomcat.oidc.agent.util.Utils.getIndexPage;
+
 /**
  * A servlet class to handle OIDC callback responses.
  */
 public class OIDCCallbackResponseHandler extends HttpServlet {
+
+    private static final Logger logger = LogManager.getLogger(OIDCCallbackResponseHandler.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -94,7 +101,7 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
                 response.sendRedirect(getIndexPage(request, properties));
             }
         } else {
-            //log: invalid scenario
+            logger.log(Level.ERROR, "Invalidate the session due to invalid scenario.");
             clearSession(request);
             response.sendRedirect(getIndexPage(request, properties));
         }
@@ -119,8 +126,6 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         final String authzCode = request.getParameter("code");
 //      Use  AuthorizationResponse authorizationResponse
-        request.getSession()
-                .setAttribute(SSOAgentConstants.SESSION_STATE, request.getParameter(SSOAgentConstants.SESSION_STATE));
 
         TokenRequest tokenRequest = getTokenRequest(properties, authzCode);
         TokenResponse tokenResponse = getTokenResponse(tokenRequest);
@@ -140,17 +145,19 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         AccessTokenResponse successResponse = tokenResponse.toSuccessResponse();
         AccessToken accessToken = successResponse.getTokens().getAccessToken();
 
-        session.setAttribute("accessToken", accessToken); //use constants
-        String idToken = successResponse.getCustomParameters().get("id_token").toString(); // parse to JWT
+        session.setAttribute(SSOAgentConstants.ACCESS_TOKEN, accessToken);
+        String idToken =
+                successResponse.getCustomParameters().get(SSOAgentConstants.ID_TOKEN).toString(); // parse to JWT
 
         if (idToken == null) {
-            throw new SSOAgentServerException("null id token"); //TODO log
+            logger.log(Level.ERROR, "id_token is null.");
+            throw new SSOAgentServerException("null id token");
         }
         //TODO validate IdToken (Signature, ref. spec)
         try {
             JWTClaimsSet claimsSet = SignedJWT.parse(idToken).getJWTClaimsSet();
             User user = new User(claimsSet.getSubject(), getUserAttributes(idToken));
-            session.setAttribute("idToken", idToken);
+            session.setAttribute("id_token", idToken);
             session.setAttribute("user", user);
             session.setAttribute("authenticated", true);
         } catch (ParseException e) {
@@ -163,7 +170,8 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         TokenErrorResponse errorResponse = tokenResponse.toErrorResponse();
         JSONObject requestObject = requestToJson(tokenRequest);
         JSONObject responseObject = errorResponse.toJSONObject();
-        //log requestObject, responseObject
+        logger.log(Level.INFO, "Request object for the error response: ", requestObject);
+        logger.log(Level.INFO, "Error response object: ", responseObject);
     }
 
     private TokenResponse getTokenResponse(TokenRequest tokenRequest) {
@@ -171,10 +179,8 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         TokenResponse tokenResponse = null;
         try {
             tokenResponse = TokenResponse.parse(tokenRequest.toHTTPRequest().send());
-        } catch (com.nimbusds.oauth2.sdk.ParseException e) {
-            e.printStackTrace(); //TODO
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (com.nimbusds.oauth2.sdk.ParseException | IOException e) {
+            logger.log(Level.ERROR, "Error while parsing token response.", e);
         }
         return tokenResponse;
     }
@@ -250,14 +256,5 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         String error = request.getParameter(SSOAgentConstants.ERROR);
         return StringUtils.isNotBlank(error);
-    }
-
-    private String getIndexPage(HttpServletRequest request, Properties properties) { //TODO: mv to Util
-
-        if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
-            return properties.getProperty(SSOAgentConstants.INDEX_PAGE);
-        } else {
-            return request.getContextPath(); //TODO: verify whether context url string is returned
-        }
     }
 }

@@ -18,9 +18,12 @@
 
 package io.asgardio.tomcat.oidc.agent;
 
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
-import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -33,6 +36,8 @@ import javax.servlet.ServletContextListener;
  * An event listener class used to load the app.properties file configurations.
  */
 public class SSOAgentContextEventListener implements ServletContextListener {
+
+    private static final Logger logger = LogManager.getLogger(OIDCCallbackResponseHandler.class);
 
     private static Properties properties;
 
@@ -69,7 +74,7 @@ public class SSOAgentContextEventListener implements ServletContextListener {
             }
 
         } catch (IOException | SSOAgentClientException e) {
-            e.printStackTrace();
+            logger.log(Level.FATAL, "Error while loading properties.", e);
         }
     }
 

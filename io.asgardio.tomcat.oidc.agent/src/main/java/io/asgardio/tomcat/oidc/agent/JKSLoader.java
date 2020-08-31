@@ -18,9 +18,12 @@
 
 package io.asgardio.tomcat.oidc.agent;
 
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
-import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,9 +40,11 @@ import javax.servlet.ServletContextListener;
 //comprehensive comments: ref: oracle guide
 public class JKSLoader implements ServletContextListener {
 
+    private static final Logger logger = LogManager.getLogger(JKSLoader.class);
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        //Logger log4j2
+
         // First find jks properties
         try {
             ServletContext servletContext = servletContextEvent.getServletContext();
@@ -63,17 +68,19 @@ public class JKSLoader implements ServletContextListener {
 
             // Find and set JKS required for IS server communication
             final URL resource =
-                    this.getClass().getClassLoader().getResource(jksProperties.getProperty("keystorename"));
+                    this.getClass().getClassLoader()
+                            .getResource(jksProperties.getProperty(SSOAgentConstants.KEYSTORE_NAME));
             //use constant
 
             if (resource != null) {
                 //TODO (configuration with two trust stores)
                 System.setProperty("javax.net.ssl.trustStore", resource.getPath());
-                System.setProperty("javax.net.ssl.trustStorePassword", jksProperties.getProperty("keystorepassword"));
+                System.setProperty("javax.net.ssl.trustStorePassword",
+                        jksProperties.getProperty(SSOAgentConstants.KEYSTORE_PASSWORD));
             }
 
         } catch (IOException | SSOAgentClientException e) {
-            e.printStackTrace(); //TODO
+            logger.log(Level.FATAL, "Error while loading properties.", e);
             return;
         }
     }

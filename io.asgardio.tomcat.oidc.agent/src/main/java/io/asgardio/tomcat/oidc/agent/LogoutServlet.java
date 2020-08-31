@@ -20,10 +20,12 @@ package io.asgardio.tomcat.oidc.agent;
 
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
-import com.nimbusds.oauth2.sdk.id.State;
 import com.nimbusds.openid.connect.sdk.LogoutRequest;
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentException;
-import io.asgardio.java.oidc.sdk.util.SSOAgentConstants;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,8 +38,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 //class comment
 public class LogoutServlet extends HttpServlet {
+
+    private static final Logger logger = LogManager.getLogger(LogoutServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -57,7 +62,7 @@ public class LogoutServlet extends HttpServlet {
         HttpSession currentSession = req.getSession(false);
         LogoutRequest logoutRequest = getLogoutRequest(currentSession);
 
-        //add a logger
+        logger.log(Level.INFO, "Invalidate the session in the client side upon RP-Initiated logout.");
         currentSession.invalidate();
 
         resp.sendRedirect(logoutRequest.toURI().toString());
@@ -70,9 +75,8 @@ public class LogoutServlet extends HttpServlet {
         try {
             URI logoutEP = new URI(properties.getProperty(SSOAgentConstants.OIDC_LOGOUT_ENDPOINT));
             URI redirectionURI = new URI(properties.getProperty(SSOAgentConstants.POST_LOGOUT_REDIRECTION_URI));
-            State state = new State((String) currentSession.getAttribute(SSOAgentConstants.SESSION_STATE));
-            JWT jwtIdToken = JWTParser.parse((String) currentSession.getAttribute("idToken")); //use constant from sdk
-            logoutRequest = new LogoutRequest(logoutEP, jwtIdToken, redirectionURI, state);
+            JWT jwtIdToken = JWTParser.parse((String) currentSession.getAttribute(SSOAgentConstants.ID_TOKEN));
+            logoutRequest = new LogoutRequest(logoutEP, jwtIdToken, redirectionURI, null);
 
         } catch (URISyntaxException | ParseException e) {
             throw new SSOAgentException("Error while fetching logout URL.", e);

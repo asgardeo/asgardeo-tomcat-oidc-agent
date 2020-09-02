@@ -63,7 +63,11 @@ import javax.servlet.http.HttpSession;
 import static io.asgardio.tomcat.oidc.agent.util.Utils.getIndexPage;
 
 /**
- * A servlet class to handle OIDC callback responses.
+ * OIDCCallbackResponseHandler is the Servlet class for handling
+ * OIDC callback responses. It is extended from the base class, {@link HttpServlet}.
+ *
+ * @version     0.1.1
+ * @since       0.1.1
  */
 public class OIDCCallbackResponseHandler extends HttpServlet {
 
@@ -86,18 +90,15 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         Properties properties = SSOAgentContextEventListener.getProperties();
 
-        if (isError(request)) {
-            clearSession(request);
-            response.sendRedirect(getIndexPage(request, properties));
-        } else if (isLogout(request)) {
-            clearSession(request);
-            response.sendRedirect(getIndexPage(request, properties));
-        } else if (isAuthorizationCodeResponse(request)) {
+        if (!isError(request) && isAuthorizationCodeResponse(request)) {
+            logger.log(Level.INFO, "Handling the OIDC Authorization response.");
             try {
                 boolean isAuthenticated = handleAuthentication(request, response);
                 if (isAuthenticated) {
+                    logger.log(Level.INFO, "Authentication successful. Redirecting to the target page.");
                     response.sendRedirect("home.jsp"); //TODO: target page
                 } else {
+                    logger.log(Level.ERROR, "Authentication failed. Invalidating the session.");
                     request.getSession().invalidate();
                     // redirect to index TODO error.jsp
                     response.sendRedirect(getIndexPage(request, properties));
@@ -106,7 +107,7 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
                 response.sendRedirect(getIndexPage(request, properties));
             }
         } else {
-            logger.log(Level.ERROR, "Invalidate the session due to invalid scenario.");
+            logger.log(Level.INFO, "Clearing the active session and redirecting.");
             clearSession(request);
             response.sendRedirect(getIndexPage(request, properties));
         }
@@ -169,7 +170,7 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         session.setAttribute(SSOAgentConstants.ACCESS_TOKEN, accessToken);
         String idToken =
-                successResponse.getCustomParameters().get(SSOAgentConstants.ID_TOKEN).toString(); // parse to JWT
+                successResponse.getCustomParameters().get(SSOAgentConstants.ID_TOKEN).toString();
 
         if (idToken == null) {
             logger.log(Level.ERROR, "id_token is null.");
@@ -235,18 +236,6 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
         }
 
         return new TokenRequest(tokenEndpoint, clientAuthentication, authorizationGrant);
-    }
-
-    private boolean isLogout(HttpServletRequest request) {
-
-        if (request.getParameterMap().isEmpty()) { //TODO: revise
-            return true;
-        }
-        if (request.getParameterMap().containsKey("sp") &&
-                request.getParameterMap().containsKey("tenantDomain")) {
-            return true;
-        }
-        return false;
     }
 
     private JSONObject requestToJson(AbstractRequest request) {

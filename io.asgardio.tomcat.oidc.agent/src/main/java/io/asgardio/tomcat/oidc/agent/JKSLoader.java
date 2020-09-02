@@ -35,9 +35,13 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * Used to find and set JKS required for IS server communication.
+ * JKSLoader is the class for finding the JKS properties and
+ * setting them for secure communication with the Identity Server.
+ * It is an implementation of the base class, {@link ServletContextListener}.
+ *
+ * @version 0.1.1
+ * @since 0.1.1
  */
-//comprehensive comments: ref: oracle guide
 public class JKSLoader implements ServletContextListener {
 
     private static final Logger logger = LogManager.getLogger(JKSLoader.class);

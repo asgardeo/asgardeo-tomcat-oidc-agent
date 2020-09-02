@@ -39,7 +39,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//class comment
+/**
+ * Logout Servlet is the class for handling OIDC logout requests
+ * which is extended from the base class, {@link HttpServlet}.
+ *
+ *
+ * @version     0.1.1
+ * @since       0.1.1
+ */
 public class LogoutServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(LogoutServlet.class);

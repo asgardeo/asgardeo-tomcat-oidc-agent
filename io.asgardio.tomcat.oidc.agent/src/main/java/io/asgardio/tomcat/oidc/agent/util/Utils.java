@@ -26,8 +26,26 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Utils class holds the public methods that are commonly used
+ * in the {@linkplain io.asgardio.tomcat.oidc.agent} module.
+ *
+ * @version 0.1.1
+ * @since 0.1.1
+ */
 public class Utils {
 
+    /**
+     * Returns the IndexPage as a {@link String} from the app.properties
+     * configuration file.
+     *
+     * @param request    HttpServletRequest.
+     * @param properties Properties loaded from the app.properties file.
+     * @return IndexPage configured in the app.properties file.
+     * @see io.asgardio.tomcat.oidc.agent.OIDCAuthorizationFilter
+     * @see io.asgardio.tomcat.oidc.agent.OIDCCallbackResponseHandler
+     * @since 0.1.1
+     */
     public static String getIndexPage(HttpServletRequest request, Properties properties) {
 
         if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
@@ -37,6 +55,16 @@ public class Utils {
         }
     }
 
+    /**
+     * Checks if the session is an already authenticated session.
+     *
+     * @param request HttpServletRequest.
+     * @return <code>true</code> if the request has
+     * the session attribute "authenticated";
+     * <code>false</code> otherwise.
+     * @see io.asgardio.tomcat.oidc.agent.OIDCAuthorizationFilter
+     * @since 0.1.1
+     */
     public static boolean isAuthenticated(final HttpServletRequest request) {
 
         final HttpSession currentSession = request.getSession(false);

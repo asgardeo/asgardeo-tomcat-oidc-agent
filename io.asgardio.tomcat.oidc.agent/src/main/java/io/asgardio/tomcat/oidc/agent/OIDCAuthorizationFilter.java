@@ -47,7 +47,20 @@ import static io.asgardio.tomcat.oidc.agent.util.Utils.getIndexPage;
 import static io.asgardio.tomcat.oidc.agent.util.Utils.isAuthenticated;
 
 /**
- * A Filter class used to check sessions and secure pages.
+ * OIDCAuthorizationFilter is the Filter class responsible for building
+ * an authentication request and redirecting the user for authentication.
+ * It is an implementation of the base class, {@link Filter}.
+ * OIDCAuthorizationFilter verifies if:
+ * <ul>
+ * <li>The request is a URL to skip
+ * <li>The request is already authenticated
+ * </ul>
+ * <p>
+ * If the above conditions are not met, OIDCAuthorizationFilter builds an
+ * authentication request and redirects the user.
+ *
+ * @version     0.1.1
+ * @since       0.1.1
  */
 public class OIDCAuthorizationFilter implements Filter {
 

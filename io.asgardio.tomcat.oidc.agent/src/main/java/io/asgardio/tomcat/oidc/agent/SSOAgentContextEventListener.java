@@ -33,8 +33,14 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * An event listener class used to load the app.properties file configurations.
+ * SSOAgentContextEventListener is the event listener class responsible
+ * for loading the app.properties file configurations to the context.
+ * It is an implementation of the base class, {@link ServletContextListener}.
+ *
+ * @version 0.1.1
+ * @since 0.1.1
  */
+
 public class SSOAgentContextEventListener implements ServletContextListener {
 
     private static final Logger logger = LogManager.getLogger(OIDCCallbackResponseHandler.class);

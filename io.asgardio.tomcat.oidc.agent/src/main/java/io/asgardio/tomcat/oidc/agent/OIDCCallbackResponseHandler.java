@@ -277,6 +277,9 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
             handleErrorAuthorizationResponse(authorizationResponse);
             return false;
         }
+        if (!authorizationResponse.toParameters().containsKey("code")) {
+            return false;
+        }
         return true;
     }
 

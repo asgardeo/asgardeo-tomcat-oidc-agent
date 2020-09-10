@@ -67,16 +67,28 @@ public class OIDCAuthorizationFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(OIDCAuthorizationFilter.class);
 
     protected FilterConfig filterConfig = null;
+//    LoginManager loginManager;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
         this.filterConfig = filterConfig;
+//        loginManager = LoginManager(filterConfig);
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+
+//        if (loginManager.isSecuredPage(servletRequest)) {
+//            if (loginManager.isActiveSessionPresent(servletRequest)) {
+//                filterChain.doFilter(request, response);
+//            } else {
+//                loginManager.login(servletRequest, servletResponse);
+//                return;
+//            }
+//        }
+//        filterChain.doFilter(request, response);
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;

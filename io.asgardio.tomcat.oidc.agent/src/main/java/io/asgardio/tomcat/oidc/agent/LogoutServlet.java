@@ -66,6 +66,7 @@ public class LogoutServlet extends HttpServlet {
     private void handleOIDCLogout(HttpServletRequest req, HttpServletResponse resp)
             throws SSOAgentException, IOException {
 
+
         HttpSession currentSession = req.getSession(false);
         LogoutRequest logoutRequest = getLogoutRequest(currentSession);
 

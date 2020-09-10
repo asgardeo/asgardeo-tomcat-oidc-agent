@@ -35,15 +35,15 @@
         <url-pattern>/oauth2client</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>OAuth2LogoutServlet</servlet-name>
-        <servlet-class>io.asgardio.tomcat.oidc.agent.LogoutServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>OAuth2LogoutServlet</servlet-name>
-        <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>OAuth2LogoutServlet</servlet-name>-->
+<!--        <servlet-class>io.asgardio.tomcat.oidc.agent.LogoutServlet</servlet-class>-->
+<!--        <load-on-startup>0</load-on-startup>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>OAuth2LogoutServlet</servlet-name>-->
+<!--        <url-pattern>/logout</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <filter>
         <filter-name>AuthorizationFilter</filter-name>
@@ -57,6 +57,16 @@
         <filter-name>AuthorizationFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>OIDCAgentFilter</filter-name>
+        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OIDCAgentFilter</filter-name>
+        <url-pattern>/logout</url-pattern>
+    </filter-mapping>
+
 
     <listener>
         <listener-class>io.asgardio.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>

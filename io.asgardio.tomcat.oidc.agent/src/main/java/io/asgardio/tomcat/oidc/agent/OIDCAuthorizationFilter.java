@@ -19,22 +19,15 @@
 package io.asgardio.tomcat.oidc.agent;
 
 import com.nimbusds.oauth2.sdk.AuthorizationRequest;
-import com.nimbusds.oauth2.sdk.ResponseType;
-import com.nimbusds.oauth2.sdk.Scope;
-import com.nimbusds.oauth2.sdk.id.ClientID;
 import io.asgardio.java.oidc.sdk.OIDCManager;
 import io.asgardio.java.oidc.sdk.OIDCManagerImpl;
-import io.asgardio.java.oidc.sdk.SSOAgentConstants;
+import io.asgardio.java.oidc.sdk.OIDCRequestResolver;
 import io.asgardio.java.oidc.sdk.bean.OIDCAgentConfig;
 import io.asgardio.java.oidc.sdk.util.OIDCFilterUtils;
-import io.asgardio.java.oidc.sdk.util.OIDCRequestResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -93,7 +86,7 @@ public class OIDCAuthorizationFilter implements Filter {
             } else {
 //                loginManager.login(servletRequest, servletResponse);
 //                return;
-                AuthorizationRequest authorizationRequest =  oidcManager.authorize();
+                AuthorizationRequest authorizationRequest = oidcManager.authorize();
                 response.sendRedirect(authorizationRequest.toURI().toString());
             }
             return;

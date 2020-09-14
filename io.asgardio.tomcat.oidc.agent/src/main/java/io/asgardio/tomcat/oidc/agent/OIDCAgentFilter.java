@@ -21,9 +21,9 @@ package io.asgardio.tomcat.oidc.agent;
 import com.nimbusds.openid.connect.sdk.LogoutRequest;
 import io.asgardio.java.oidc.sdk.OIDCManager;
 import io.asgardio.java.oidc.sdk.OIDCManagerImpl;
+import io.asgardio.java.oidc.sdk.OIDCRequestResolver;
 import io.asgardio.java.oidc.sdk.bean.OIDCAgentConfig;
 import io.asgardio.java.oidc.sdk.util.OIDCFilterUtils;
-import io.asgardio.java.oidc.sdk.util.OIDCRequestResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,11 +43,16 @@ public class OIDCAgentFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(OIDCAgentFilter.class);
 
     protected FilterConfig filterConfig = null;
+    OIDCAgentConfig oidcAgentConfig;
+    OIDCManager oidcManager;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
         this.filterConfig = filterConfig;
+//        this.oidcAgentConfig = OIDCFilterUtils.getOIDCAgentConfig(filterConfig);
+        this.oidcAgentConfig = OIDCManager.getConfig(filterConfig);
+        oidcManager = new OIDCManagerImpl(oidcAgentConfig);
     }
 
     @Override
@@ -65,14 +70,21 @@ public class OIDCAgentFilter implements Filter {
             return;
         }
 
-        OIDCManager oidcManager = new OIDCManagerImpl(oidcAgentConfig);
-
         if (requestResolver.isLogoutURL()) {
             LogoutRequest logoutRequest = oidcManager.singleLogout(request);
             response.sendRedirect(logoutRequest.toURI().toString());
             return;
         }
 
+
+        if (oidcManager.isActiveSessionPresent(request)) {
+            filterChain.doFilter(request, response);
+        } else {
+            oidcManager.login(servletRequest, servletResponse);
+            return;
+//            AuthorizationRequest authorizationRequest =  oidcManager.authorize();
+//            response.sendRedirect(authorizationRequest.toURI().toString());
+        }
     }
 
     @Override

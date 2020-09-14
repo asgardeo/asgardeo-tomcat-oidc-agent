@@ -60,14 +60,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static io.asgardio.tomcat.oidc.agent.util.Utils.getIndexPage;
-
 /**
  * OIDCCallbackResponseHandler is the Servlet class for handling
  * OIDC callback responses. It is extended from the base class, {@link HttpServlet}.
  *
- * @version     0.1.1
- * @since       0.1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class OIDCCallbackResponseHandler extends HttpServlet {
 
@@ -287,5 +285,25 @@ public class OIDCCallbackResponseHandler extends HttpServlet {
 
         String error = request.getParameter(SSOAgentConstants.ERROR);
         return StringUtils.isNotBlank(error);
+    }
+
+    /**
+     * Returns the IndexPage as a {@link String} from the app.properties
+     * configuration file.
+     *
+     * @param request    HttpServletRequest.
+     * @param properties Properties loaded from the app.properties file.
+     * @return IndexPage configured in the app.properties file.
+     * @see io.asgardio.tomcat.oidc.agent.OIDCAuthorizationFilter
+     * @see io.asgardio.tomcat.oidc.agent.OIDCCallbackResponseHandler
+     * @since 0.1.1
+     */
+    private String getIndexPage(HttpServletRequest request, Properties properties) {
+
+        if (StringUtils.isNotBlank(properties.getProperty(SSOAgentConstants.INDEX_PAGE))) {
+            return properties.getProperty(SSOAgentConstants.INDEX_PAGE);
+        } else {
+            return request.getContextPath();
+        }
     }
 }

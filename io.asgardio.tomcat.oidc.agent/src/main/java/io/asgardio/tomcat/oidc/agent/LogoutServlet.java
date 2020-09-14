@@ -43,9 +43,8 @@ import javax.servlet.http.HttpSession;
  * Logout Servlet is the class for handling OIDC logout requests
  * which is extended from the base class, {@link HttpServlet}.
  *
- *
- * @version     0.1.1
- * @since       0.1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class LogoutServlet extends HttpServlet {
 
@@ -65,7 +64,6 @@ public class LogoutServlet extends HttpServlet {
 
     private void handleOIDCLogout(HttpServletRequest req, HttpServletResponse resp)
             throws SSOAgentException, IOException {
-
 
         HttpSession currentSession = req.getSession(false);
         LogoutRequest logoutRequest = getLogoutRequest(currentSession);

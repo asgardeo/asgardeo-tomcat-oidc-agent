@@ -76,6 +76,10 @@ public class OIDCAgentFilter implements Filter {
             return;
         }
 
+        if (requestResolver.isCallbackResponse()) {
+            oidcManager.handleOIDCCallback(request, response);
+            return;
+        }
 
         if (oidcManager.isActiveSessionPresent(request)) {
             filterChain.doFilter(request, response);

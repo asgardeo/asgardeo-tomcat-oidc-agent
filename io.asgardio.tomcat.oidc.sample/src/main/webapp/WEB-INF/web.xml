@@ -25,15 +25,15 @@
 
     <display-name>oidc-sample-app</display-name>
 
-    <servlet>
-        <servlet-name>OAuth2ClientServlet</servlet-name>
-        <servlet-class>io.asgardio.tomcat.oidc.agent.OIDCCallbackResponseHandler</servlet-class>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>OAuth2ClientServlet</servlet-name>
-        <url-pattern>/oauth2client</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>OAuth2ClientServlet</servlet-name>-->
+<!--        <servlet-class>io.asgardio.tomcat.oidc.agent.OIDCCallbackResponseHandler</servlet-class>-->
+<!--        <load-on-startup>0</load-on-startup>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>OAuth2ClientServlet</servlet-name>-->
+<!--        <url-pattern>/oauth2client</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 <!--    <servlet>-->
 <!--        <servlet-name>OAuth2LogoutServlet</servlet-name>-->
@@ -65,6 +65,10 @@
     <filter-mapping>
         <filter-name>OIDCAgentFilter</filter-name>
         <url-pattern>/logout</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>OIDCAgentFilter</filter-name>
+        <url-pattern>/oauth2client</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>OIDCAgentFilter</filter-name>

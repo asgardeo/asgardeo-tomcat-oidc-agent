@@ -44,7 +44,7 @@ import javax.servlet.ServletContextListener;
 
 public class SSOAgentContextEventListener implements ServletContextListener {
 
-    private static final Logger logger = LogManager.getLogger(OIDCCallbackResponseHandler.class);
+    private static final Logger logger = LogManager.getLogger(SSOAgentContextEventListener.class);
 
     private static Properties properties;
 

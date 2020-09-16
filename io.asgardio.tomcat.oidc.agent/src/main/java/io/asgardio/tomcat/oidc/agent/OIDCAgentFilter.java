@@ -49,7 +49,7 @@ import javax.servlet.http.HttpServletResponse;
  * <li>The request is already authenticated
  * </ul>
  * <p>
- * And build and send the requests and handle the response,
+ * and build and send the request, handle the response,
  * or forward the request accordingly.
  *
  * @version     0.1.1

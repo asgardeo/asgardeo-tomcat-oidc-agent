@@ -37,6 +37,24 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * OIDCAuthorizationFilter is the Filter class responsible for building
+ * requests and handling responses for authentication, SLO and session
+ * management for the OpenID Connect flows, using the io-asgardio-oidc-sdk.
+ * It is an implementation of the base class, {@link Filter}.
+ * OIDCAuthorizationFilter verifies if:
+ * <ul>
+ * <li>The request is a URL to skip
+ * <li>The request is a Logout request
+ * <li>The request is already authenticated
+ * </ul>
+ * <p>
+ * And build and send the requests and handle the response,
+ * or forward the request accordingly.
+ *
+ * @version     0.1.1
+ * @since       0.1.1
+ */
 public class OIDCAgentFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(OIDCAgentFilter.class);

@@ -186,7 +186,7 @@
     </build>
 
     <properties>
-        <io.asgardio.java.oidc.sdk.version>0.1.1-SNAPSHOT</io.asgardio.java.oidc.sdk.version>
+        <io.asgardio.java.oidc.sdk.version>0.1.2-SNAPSHOT</io.asgardio.java.oidc.sdk.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
     </properties>
 </project>

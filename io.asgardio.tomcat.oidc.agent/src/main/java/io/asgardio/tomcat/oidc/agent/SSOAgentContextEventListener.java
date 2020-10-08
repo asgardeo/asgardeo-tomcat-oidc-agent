@@ -19,13 +19,16 @@
 package io.asgardio.tomcat.oidc.agent;
 
 import io.asgardio.java.oidc.sdk.SSOAgentConstants;
-import io.asgardio.java.oidc.sdk.bean.OIDCAgentConfig;
+import io.asgardio.java.oidc.sdk.config.FileBasedOIDCConfigProvider;
+import io.asgardio.java.oidc.sdk.config.OIDCConfigProvider;
+import io.asgardio.java.oidc.sdk.config.model.OIDCAgentConfig;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -73,17 +76,15 @@ public class SSOAgentContextEventListener implements ServletContextListener {
                     SSOAgentConstants.APP_PROPERTY_FILE_PARAMETER_NAME);
 
             if (StringUtils.isNotBlank(propertyFileName)) {
-                properties.load(servletContextEvent.getServletContext().
+                OIDCConfigProvider configProvider = new FileBasedOIDCConfigProvider(servletContextEvent.getServletContext().
                         getResourceAsStream("/WEB-INF/classes/" + propertyFileName));
+                OIDCAgentConfig config = configProvider.getOidcAgentConfig();
+                servletContext.setAttribute(SSOAgentConstants.CONFIG_BEAN_NAME, config);
             } else {
                 throw new SSOAgentClientException(SSOAgentConstants.APP_PROPERTY_FILE_PARAMETER_NAME
                         + " context-param is not specified in the web.xml");
             }
-            OIDCAgentConfig config = new OIDCAgentConfig();
-            config.initConfig(properties);
-            servletContext.setAttribute(SSOAgentConstants.CONFIG_BEAN_NAME, config);
-
-        } catch (IOException | SSOAgentClientException e) {
+        } catch (SSOAgentClientException e) {
             logger.log(Level.FATAL, "Error while loading properties.", e);
         }
     }

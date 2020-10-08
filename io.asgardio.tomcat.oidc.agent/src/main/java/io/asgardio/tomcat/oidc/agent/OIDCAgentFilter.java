@@ -18,11 +18,15 @@
 
 package io.asgardio.tomcat.oidc.agent;
 
-import io.asgardio.java.oidc.sdk.OIDCConfigProvider;
 import io.asgardio.java.oidc.sdk.OIDCManager;
 import io.asgardio.java.oidc.sdk.OIDCManagerImpl;
-import io.asgardio.java.oidc.sdk.OIDCRequestResolver;
-import io.asgardio.java.oidc.sdk.bean.OIDCAgentConfig;
+import io.asgardio.java.oidc.sdk.SSOAgentConstants;
+import io.asgardio.java.oidc.sdk.bean.AuthenticationInfo;
+import io.asgardio.java.oidc.sdk.config.model.OIDCAgentConfig;
+import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
+import io.asgardio.java.oidc.sdk.exception.SSOAgentException;
+import io.asgardio.java.oidc.sdk.exception.SSOAgentServerException;
+import io.asgardio.java.oidc.sdk.request.OIDCRequestResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,11 +35,13 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * OIDCAuthorizationFilter is the Filter class responsible for building
@@ -52,8 +58,8 @@ import javax.servlet.http.HttpServletResponse;
  * and build and send the request, handle the response,
  * or forward the request accordingly.
  *
- * @version     0.1.1
- * @since       0.1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class OIDCAgentFilter implements Filter {
 
@@ -62,15 +68,21 @@ public class OIDCAgentFilter implements Filter {
     protected FilterConfig filterConfig = null;
     OIDCAgentConfig oidcAgentConfig;
     OIDCManager oidcManager;
+    AuthenticationInfo authenticationInfo = new AuthenticationInfo();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
         this.filterConfig = filterConfig;
-        OIDCConfigProvider oidcConfigProvider = new OIDCConfigProvider(filterConfig.getServletContext());
-        oidcConfigProvider.init();
-        this.oidcAgentConfig = oidcConfigProvider.getOidcAgentConfig();
-        this.oidcManager = new OIDCManagerImpl(oidcAgentConfig);
+        ServletContext servletContext = filterConfig.getServletContext();
+        if (servletContext.getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME) instanceof OIDCAgentConfig) {
+            this.oidcAgentConfig = (OIDCAgentConfig) servletContext.getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
+        }
+        try {
+            this.oidcManager = new OIDCManagerImpl(oidcAgentConfig);
+        } catch (SSOAgentClientException e) {
+            e.printStackTrace(); //TODO
+        }
     }
 
     @Override
@@ -88,17 +100,40 @@ public class OIDCAgentFilter implements Filter {
         }
 
         if (requestResolver.isLogoutURL()) {
-            oidcManager.singleLogout(request, response);
+            clearSession(request);
+            try {
+                oidcManager.logout(authenticationInfo, response, null);
+            } catch (SSOAgentException e) {
+                handleException(request, e);
+            }
             return;
         }
 
         if (requestResolver.isCallbackResponse()) {
-            oidcManager.handleOIDCCallback(request, response);
+            clearSession(request);
+            try {
+                authenticationInfo = oidcManager.handleOIDCCallback(request, response);
+            } catch (SSOAgentServerException e) {
+                handleException(request, e);
+            }
+
+            if (authenticationInfo != null) {
+                clearSession(request);
+                HttpSession session = request.getSession();
+                session.setAttribute("authenticationInfo", authenticationInfo);
+                response.sendRedirect("home.jsp");
+            } else {
+                handleException(request, new SSOAgentException("null authentication info."));
+            }
             return;
         }
 
-        if (!oidcManager.isActiveSessionPresent(request)) {
-            oidcManager.login(servletRequest, servletResponse);
+        if (!isActiveSessionPresent(request)) {
+            try {
+                oidcManager.sendForLogin(request, response, null);
+            } catch (SSOAgentException e) {
+                handleException(request, e);
+            }
         } else {
             filterChain.doFilter(request, response);
         }
@@ -107,5 +142,28 @@ public class OIDCAgentFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    boolean isActiveSessionPresent(HttpServletRequest request) {
+
+        HttpSession currentSession = request.getSession(false);
+
+        return currentSession != null
+                && currentSession.getAttribute(SSOAgentConstants.AUTHENTICATION_INFO) != null
+                && currentSession.getAttribute(SSOAgentConstants.AUTHENTICATION_INFO) instanceof AuthenticationInfo;
+    }
+
+    void clearSession(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+    }
+
+    protected void handleException(HttpServletRequest request, SSOAgentException e) throws SSOAgentException {
+
+        clearSession(request);
+        throw e;
     }
 }

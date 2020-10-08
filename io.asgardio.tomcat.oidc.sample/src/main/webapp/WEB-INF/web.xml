@@ -61,4 +61,9 @@
         <param-name>jks-property-file</param-name>
         <param-value>jks.properties</param-value>
     </context-param>
+
+    <error-page>
+        <exception-type>io.asgardio.java.oidc.sdk.exception.SSOAgentException</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
 </web-app>

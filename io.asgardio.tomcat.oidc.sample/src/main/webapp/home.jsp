@@ -21,17 +21,20 @@
 <%@page import="java.util.HashMap" %>
 <%@page import="java.util.Map" %>
 <%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
+<%@ page import="io.asgardio.java.oidc.sdk.bean.AuthenticationInfo" %>
 
 <%
     final HttpSession currentSession = request.getSession(false);
-    final String idToken = (String) currentSession.getAttribute("id_token");
+    final AuthenticationInfo authenticationInfo = (AuthenticationInfo)
+            currentSession.getAttribute("authenticationInfo");
+    final String idToken = authenticationInfo.getIdToken().getParsedString();
     
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();
     
     if (idToken != null) {
         try {
-            final User user = (User) currentSession.getAttribute("user");
+            final User user = authenticationInfo.getUser();
             customClaimValueMap = user.getAttributes();
             name = user.getSubject();
         } catch (Exception e) {

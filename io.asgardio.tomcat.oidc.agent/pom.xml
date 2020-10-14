@@ -38,6 +38,10 @@
             <groupId>io.asgardio.java.oidc.sdk</groupId>
             <artifactId>io.asgardio.java.oidc.sdk</artifactId>
         </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

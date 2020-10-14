@@ -129,6 +129,11 @@
                 <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -188,5 +193,6 @@
     <properties>
         <io.asgardio.java.oidc.sdk.version>0.1.2-SNAPSHOT</io.asgardio.java.oidc.sdk.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
+        <xerces.version>2.11.0</xerces.version>
     </properties>
 </project>

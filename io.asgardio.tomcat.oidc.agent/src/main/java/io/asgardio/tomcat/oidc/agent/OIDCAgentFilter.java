@@ -110,7 +110,6 @@ public class OIDCAgentFilter implements Filter {
         }
 
         if (requestResolver.isCallbackResponse()) {
-            clearSession(request);
             try {
                 authenticationInfo = oidcManager.handleOIDCCallback(request, response);
             } catch (SSOAgentServerException e) {

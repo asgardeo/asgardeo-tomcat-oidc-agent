@@ -27,8 +27,7 @@
 
     <filter>
         <filter-name>OIDCAgentFilter</filter-name>
-<!--        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>-->
-        <filter-class>io.asgardio.tomcat.oidc.agent.HTTPSessionBasedOIDCAgentFilter</filter-class>
+        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>OIDCAgentFilter</filter-name>
@@ -62,9 +61,4 @@
         <param-name>jks-property-file</param-name>
         <param-value>jks.properties</param-value>
     </context-param>
-
-    <error-page>
-        <exception-type>io.asgardio.java.oidc.sdk.exception.SSOAgentException</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
 </web-app>

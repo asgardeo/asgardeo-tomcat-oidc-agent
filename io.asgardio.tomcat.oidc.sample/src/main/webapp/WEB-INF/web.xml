@@ -27,7 +27,8 @@
 
     <filter>
         <filter-name>OIDCAgentFilter</filter-name>
-        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
+<!--        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>-->
+        <filter-class>io.asgardio.tomcat.oidc.agent.HTTPSessionBasedOIDCAgentFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>OIDCAgentFilter</filter-name>

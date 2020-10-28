@@ -18,10 +18,8 @@
 
 package io.asgardio.tomcat.oidc.agent;
 
-import io.asgardio.java.oidc.sdk.DefaultOIDCManager;
-import io.asgardio.java.oidc.sdk.OIDCManager;
+import io.asgardio.java.oidc.sdk.HTTPSessionBasedOIDCProcessor;
 import io.asgardio.java.oidc.sdk.SSOAgentConstants;
-import io.asgardio.java.oidc.sdk.bean.RequestContext;
 import io.asgardio.java.oidc.sdk.bean.SessionContext;
 import io.asgardio.java.oidc.sdk.config.model.OIDCAgentConfig;
 import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
@@ -45,11 +43,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * OIDCAgentFilter is the Filter class responsible for building
+ * HTTPSessionBasedOIDCAgentFilter is the Filter class responsible for building
  * requests and handling responses for authentication, SLO and session
  * management for the OpenID Connect flows, using the io-asgardio-oidc-sdk.
  * It is an implementation of the base class, {@link Filter}.
- * OIDCAgentFilter verifies if:
+ * HTTPSessionBasedOIDCAgentFilter verifies if:
  * <ul>
  * <li>The request is a URL to skip
  * <li>The request is a Logout request
@@ -62,13 +60,13 @@ import javax.servlet.http.HttpSession;
  * @version 0.1.1
  * @since 0.1.1
  */
-public class OIDCAgentFilter implements Filter {
+public class HTTPSessionBasedOIDCAgentFilter implements Filter {
 
     private static final Logger logger = LogManager.getLogger(OIDCAgentFilter.class);
 
     protected FilterConfig filterConfig = null;
     OIDCAgentConfig oidcAgentConfig;
-    OIDCManager oidcManager;
+    HTTPSessionBasedOIDCProcessor oidcManager;
     SessionContext sessionContext = new SessionContext();
 
     @Override
@@ -80,7 +78,7 @@ public class OIDCAgentFilter implements Filter {
             this.oidcAgentConfig = (OIDCAgentConfig) servletContext.getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
         }
         try {
-            this.oidcManager = new DefaultOIDCManager(oidcAgentConfig);
+            this.oidcManager = new HTTPSessionBasedOIDCProcessor(oidcAgentConfig);
         } catch (SSOAgentClientException e) {
             e.printStackTrace(); //TODO
         }
@@ -101,10 +99,8 @@ public class OIDCAgentFilter implements Filter {
         }
 
         if (requestResolver.isLogoutURL()) {
-            SessionContext context = getSessionContext(request);
-            clearSession(request);
             try {
-                oidcManager.logout(context, response);
+                oidcManager.logout(request, response);
             } catch (SSOAgentException e) {
                 handleException(request, e);
             }
@@ -112,30 +108,18 @@ public class OIDCAgentFilter implements Filter {
         }
 
         if (requestResolver.isCallbackResponse()) {
-            RequestContext context = getRequestContext(request);
-            clearSession(request);
             try {
-                sessionContext = oidcManager.handleOIDCCallback(request, response, context);
+                oidcManager.handleOIDCCallback(request, response);
             } catch (SSOAgentServerException e) {
                 handleException(request, e);
             }
-
-            if (sessionContext != null) {
-                clearSession(request);
-                HttpSession session = request.getSession();
-                session.setAttribute(SSOAgentConstants.SESSION_CONTEXT, sessionContext);
-                response.sendRedirect("home.jsp");
-            } else {
-                handleException(request, new SSOAgentException("Null session context."));
-            }
+            response.sendRedirect("home.jsp");
             return;
         }
 
         if (!isActiveSessionPresent(request)) {
             try {
-                HttpSession session = request.getSession();
-                RequestContext context = oidcManager.sendForLogin(request, response);
-                session.setAttribute(SSOAgentConstants.REQUEST_CONTEXT, context);
+                oidcManager.sendForLogin(request, response);
             } catch (SSOAgentException e) {
                 handleException(request, e);
             }
@@ -170,25 +154,5 @@ public class OIDCAgentFilter implements Filter {
 
         clearSession(request);
         throw e;
-    }
-
-    private RequestContext getRequestContext(HttpServletRequest request) throws SSOAgentServerException {
-
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute(SSOAgentConstants.REQUEST_CONTEXT) != null) {
-            return  (RequestContext) request.getSession(false)
-                    .getAttribute(SSOAgentConstants.REQUEST_CONTEXT);
-        }
-        throw new SSOAgentServerException("Request context null.");
-    }
-
-    private SessionContext getSessionContext(HttpServletRequest request) throws SSOAgentServerException {
-
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute(SSOAgentConstants.SESSION_CONTEXT) != null) {
-            return  (SessionContext) request.getSession(false)
-                    .getAttribute(SSOAgentConstants.SESSION_CONTEXT);
-        }
-        throw new SSOAgentServerException("Session context null.");
     }
 }

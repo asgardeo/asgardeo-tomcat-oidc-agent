@@ -21,20 +21,21 @@
 <%@page import="java.util.HashMap" %>
 <%@page import="java.util.Map" %>
 <%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
-<%@ page import="io.asgardio.java.oidc.sdk.bean.AuthenticationInfo" %>
+<%@ page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
+<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
 
 <%
     final HttpSession currentSession = request.getSession(false);
-    final AuthenticationInfo authenticationInfo = (AuthenticationInfo)
-            currentSession.getAttribute("authenticationInfo");
-    final String idToken = authenticationInfo.getIdToken().getParsedString();
+    final SessionContext sessionContext = (SessionContext)
+            currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
+    final String idToken = sessionContext.getIdToken().getParsedString();
     
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();
     
     if (idToken != null) {
         try {
-            final User user = authenticationInfo.getUser();
+            final User user = sessionContext.getUser();
             customClaimValueMap = user.getAttributes();
             name = user.getSubject();
         } catch (Exception e) {

@@ -179,7 +179,7 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>1.8</source>
-<!--                    //latest LTS-->
+                    <!--                    //latest LTS-->
                     <target>1.8</target>
                 </configuration>
             </plugin>

@@ -18,11 +18,11 @@
   ~ under the License.
   --%>
 
-<%@page import="java.util.HashMap" %>
-<%@page import="java.util.Map" %>
+<%@page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
+<%@page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
 <%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
-<%@ page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
-<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 
 <%
     final HttpSession currentSession = request.getSession(false);
@@ -51,27 +51,27 @@
         html, body {
             height: 100%;
         }
-        
+
         body {
             flex-direction: column;
             display: flex;
         }
-        
+
         main {
             flex-shrink: 0;
         }
-        
+
         main.center-segment {
             margin: auto;
             display: flex;
             align-items: center;
         }
-        
+
         .element-padding {
             margin: auto;
             padding: 15px;
         }
-        
+
         .center {
             margin-left: auto;
             margin-right: auto;
@@ -97,7 +97,7 @@
             </div>
             <table class="center">
                 <tbody>
-                <% for (String claim: customClaimValueMap.keySet()) { %>
+                <% for (String claim : customClaimValueMap.keySet()) { %>
                 <tr>
                     <td><%=claim%>
                     </td>

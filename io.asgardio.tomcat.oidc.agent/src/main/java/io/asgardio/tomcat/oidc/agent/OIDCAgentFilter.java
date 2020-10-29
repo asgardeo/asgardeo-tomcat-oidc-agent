@@ -59,7 +59,6 @@ import javax.servlet.http.HttpSession;
  * <p>
  * and build and send the request, handle the response,
  * or forward the request accordingly.
- *
  */
 public class OIDCAgentFilter implements Filter {
 

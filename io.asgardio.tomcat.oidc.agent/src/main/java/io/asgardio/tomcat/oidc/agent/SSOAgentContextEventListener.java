@@ -28,8 +28,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -76,8 +74,9 @@ public class SSOAgentContextEventListener implements ServletContextListener {
                     SSOAgentConstants.APP_PROPERTY_FILE_PARAMETER_NAME);
 
             if (StringUtils.isNotBlank(propertyFileName)) {
-                OIDCConfigProvider configProvider = new FileBasedOIDCConfigProvider(servletContextEvent.getServletContext().
-                        getResourceAsStream("/WEB-INF/classes/" + propertyFileName));
+                OIDCConfigProvider configProvider =
+                        new FileBasedOIDCConfigProvider(servletContextEvent.getServletContext().
+                                getResourceAsStream("/WEB-INF/classes/" + propertyFileName));
                 OIDCAgentConfig config = configProvider.getOidcAgentConfig();
                 servletContext.setAttribute(SSOAgentConstants.CONFIG_BEAN_NAME, config);
             } else {

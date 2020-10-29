@@ -28,7 +28,7 @@
     final HttpSession currentSession = request.getSession(false);
     final SessionContext sessionContext = (SessionContext)
             currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
-    final String idToken = sessionContext.getIdToken().getParsedString();
+    final String idToken = sessionContext.getIdToken();
     
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();

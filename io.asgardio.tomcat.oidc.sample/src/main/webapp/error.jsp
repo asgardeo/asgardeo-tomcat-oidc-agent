@@ -1,4 +1,5 @@
-<%--
+<%@ page import="io.asgardio.java.oidc.sdk.exception.SSOAgentException" %>
+<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %><%--
   ~ Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -47,6 +48,9 @@
         }
     </style>
 </head>
+<%
+    SSOAgentException exception = (SSOAgentException) request.getAttribute(SSOAgentConstants.AGENT_EXCEPTION);
+%>
 <body>
 <main class="center-segment">
     <div class="element-padding">

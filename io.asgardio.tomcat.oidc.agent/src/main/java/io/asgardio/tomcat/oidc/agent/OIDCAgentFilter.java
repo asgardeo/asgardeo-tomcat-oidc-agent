@@ -109,7 +109,7 @@ public class OIDCAgentFilter implements Filter {
         if (requestResolver.isCallbackResponse()) {
             try {
                 oidcManager.handleOIDCCallback(request, response);
-            } catch (SSOAgentServerException e) {
+            } catch (SSOAgentException e) {
                 handleException(request, response, e);
             }
             response.sendRedirect("home.jsp");
@@ -161,6 +161,7 @@ public class OIDCAgentFilter implements Filter {
         }
         clearSession(request);
         logger.log(Level.FATAL, e.getMessage());
+        request.setAttribute(SSOAgentConstants.AGENT_EXCEPTION, e);
         RequestDispatcher requestDispatcher = request.getServletContext().getRequestDispatcher(errorPage);
         requestDispatcher.forward(request, response);
     }

@@ -11,8 +11,8 @@ Throughout this section we will refer to the Identity Server installation direct
 ### Prerequisites
 1. [Maven](https://maven.apache.org/download.cgi) 3.6.x or higher
 
-These instructions will guide you on integrating SAML into your Java application with the Asgardio SAML SDK for Java.
-This allows an application (i.e. Service Provider) to connect with an IDP using the Asgardio SAML SDK for Java.
+These instructions will guide you on integrating OIDC into your Java application with the Asgardio SAML SDK for Java.
+This allows an application (i.e. Service Provider) to connect with an IDP using the Asgardio OIDC SDK for Java.
 
 The SDK supports the following features.
 

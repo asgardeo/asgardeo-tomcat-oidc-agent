@@ -18,17 +18,10 @@ The structure of the oidc-sample-app we are configuring would be as follows:
 
 <img width="326" alt="structure" src="https://user-images.githubusercontent.com/25428696/91556626-aa2db880-e950-11ea-9203-72d2a68d4148.png">
 
-1. Starting with the pom.xml, the following dependencies should be added for the webApp for it to be using the OIDC SDK.
-   
-   Install it as a maven dependency:
-   
-   ```
-   <dependency>
-       <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-       <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-       <version>1.0.0</version>
-   </dependency>
-   ```
+1. Download the `lib.zip` from the [latest release](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases
+/latest). [TODO]
+   1. Extract the downloaded `lib.zip` file to the `<APP_HOME>/WEB-INF` directory. (If you already have a `lib` folder in
+    your web app, merge the content of the downloaded `lib.zip` file into the existing `lib` folder.)
 
 2. Before the web.xml configurations, we will look at adding the resources files.
    In the oidc-sample-app, create a file named oidc-sample-app.properties in the `<APP_HOME>/WEB-INF/classes` directory. The 
@@ -67,7 +60,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
 
 4. Finally, copy and paste the following configurations to the `<APP_HOME>/WEB-INF/web.xml` file. 
 
-      ```
+      ```xml
       <?xml version="1.0" encoding="UTF-8"?>
         
         <!--
@@ -137,7 +130,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
 ### Enable login    
 1. Next, the webapp itself has two pages, index.html and home.jsp, and a web.xml file.
 The index.html contains a login button which we would use to forward the user to the secured page.
-      ```
+      ```html
         <form action="home.jsp" method="post">
             <div class="element-padding">
                 <input style="height: 30px; width: 60px" type="submit" value="log in">
@@ -193,7 +186,7 @@ Next, by adding the following snippets, we would be able to retrieve the user cl
 2. Then, we would use the `customClaimValueMap` in the **<APP_HOME>/home.jsp** to display the user attributes via a 
 table:
 
-      ```
+      ```html
        <table>
           <tbody>
           <% for (String claim: customClaimValueMap.keySet()) { %>
@@ -208,4 +201,4 @@ table:
       </table>
       ```
 After the above configurations, your app would be able to try out the authentication, logout and attribute 
-retrieval flows with OIDC.
+retrieval flows with OpenID Connect.

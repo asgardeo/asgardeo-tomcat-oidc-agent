@@ -34,13 +34,9 @@
     Map<String, Object> customClaimValueMap = new HashMap<>();
     
     if (idToken != null) {
-        try {
-            final User user = sessionContext.getUser();
-            customClaimValueMap = user.getAttributes();
-            name = user.getSubject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        final User user = sessionContext.getUser();
+        customClaimValueMap = user.getAttributes();
+        name = user.getSubject();
     }
 %>
 

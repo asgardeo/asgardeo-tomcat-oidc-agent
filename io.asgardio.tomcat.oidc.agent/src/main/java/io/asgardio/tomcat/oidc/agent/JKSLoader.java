@@ -49,7 +49,7 @@ public class JKSLoader implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        // First find jks properties
+        // First find jks properties.
         try {
             ServletContext servletContext = servletContextEvent.getServletContext();
             String propertyFileName = servletContext.getInitParameter(
@@ -66,15 +66,13 @@ public class JKSLoader implements ServletContextListener {
                 return;
             }
 
-            // Load properties
+            // Load properties.
             final Properties jksProperties = new Properties();
             jksProperties.load(jksInputStream);
 
-            // Find and set JKS required for IS server communication
-            final URL resource =
-                    this.getClass().getClassLoader()
-                            .getResource(jksProperties.getProperty(SSOAgentConstants.KEYSTORE_NAME));
-            //use constant
+            // Find and set JKS required for IS server communication.
+            final URL resource = this.getClass().getClassLoader()
+                    .getResource(jksProperties.getProperty(SSOAgentConstants.KEYSTORE_NAME));
 
             if (resource != null) {
                 //TODO (configuration with two trust stores)

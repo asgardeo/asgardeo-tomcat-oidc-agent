@@ -1,5 +1,4 @@
-<%@ page import="io.asgardio.java.oidc.sdk.exception.SSOAgentException" %>
-<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %><%--
+<%--
   ~ Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
   ~
   ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -17,6 +16,8 @@
   ~ under the License.
   --%>
 
+<%@ page import="io.asgardio.java.oidc.sdk.exception.SSOAgentException" %>
+<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>

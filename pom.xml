@@ -34,7 +34,7 @@
     <artifactId>tomcat-oidc-agent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Asgardio - Tomcat OIDC Agent</name>
+    <name>Asgardio - Tomcat OIDC Agent Parent Module</name>
     <description>
         Asgardio Tomcat Agent for OIDC
     </description>

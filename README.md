@@ -58,7 +58,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
     configuration,
    use following parameters and options,
      
-       Callback URL - http://localhost:8080/oidc-sample-app/oauth2client
+       Callback URL - http://localhost.com:8080/oidc-sample-app/oauth2client
 
 
    Keep the other default settings as it is and save the configuration.
@@ -74,7 +74,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
 ### Running the sample
 
 1. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
-2. Try out the application by accessing the `http://localhost:8080/oidc-sample-app/index.html`.
+2. Try out the application by accessing the `http://localhost.com:8080/oidc-sample-app/index.html`.
  
 ![Recordit GIF](http://g.recordit.co/BKqufkpZW1.gif)
 
@@ -187,7 +187,7 @@ Install it as a maven dependency:
 <dependency>
     <groupId>io.asgardio.tomcat.oidc.agent</groupId>
     <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 

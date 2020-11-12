@@ -34,20 +34,14 @@ You can experience the capabilities of Asgardio Tomcat OIDC Agent by following t
 
 ### Prerequisites
 1. WSO2 Identity Server and it's [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
-
-A sample app for demonstrating OIDC based authentication/authorization, logout and attribute retrieval is hosted at:
-[TODO link]
-
-You can download the pre-built oidc-sample-app.war from [TODO link]
+2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
 
 ### Configuring the sample
-1.  Add the following entry to the `/etc/hosts` file of your machine to configure the hostname.
-   ```
-   127.0.0.1 localhost.com
-   ```
+1. Download the [oidc-sample-app.war]((https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.2/oidc-sample-app.war).
+2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
+3. Add the entry `127.0.0.1   localhost.com` to the `/etc/hosts` file of your machine to configure the hostname.
 
 ### Configuring Identity Server
-
 Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be configured with any other preferred
  OpenID Provider as well.
  
@@ -72,9 +66,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
    ![Claim Config](https://user-images.githubusercontent.com/15249242/90488235-38d45580-e159-11ea-8beb-52d6b5c35034.png)
 
 ### Running the sample
-
-1. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
-2. Try out the application by accessing the `http://localhost.com:8080/oidc-sample-app/index.html`.
+1. Try out the application by accessing the `http://localhost.com:8080/oidc-sample-app/index.html`.
  
 ![Recordit GIF](http://g.recordit.co/BKqufkpZW1.gif)
 

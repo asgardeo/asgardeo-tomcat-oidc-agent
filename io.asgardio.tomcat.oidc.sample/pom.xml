@@ -21,7 +21,7 @@
     <parent>
         <artifactId>tomcat-oidc-agent</artifactId>
         <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-        <version>0.1.1</version>
+        <version>0.1.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>

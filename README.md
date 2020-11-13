@@ -163,7 +163,7 @@ Install it as a maven dependency:
 <dependency>
     <groupId>io.asgardio.tomcat.oidc.agent</groupId>
     <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 ### Building from the source

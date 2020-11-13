@@ -37,7 +37,7 @@ You can experience the capabilities of Asgardio Tomcat OIDC Agent by following t
 2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
 
 ### Configuring the sample
-1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.2/oidc-sample-app.war).
+1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.3/oidc-sample-app.war).
 2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
 3. Add the entry `127.0.0.1   localhost.com` to the `/etc/hosts` file of your machine to configure the hostname.
 
@@ -163,7 +163,7 @@ Install it as a maven dependency:
 <dependency>
     <groupId>io.asgardio.tomcat.oidc.agent</groupId>
     <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
 </dependency>
 ```
 ### Building from the source

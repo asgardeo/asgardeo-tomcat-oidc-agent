@@ -18,7 +18,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
 
 <img width="326" alt="structure" src="https://user-images.githubusercontent.com/25428696/91556626-aa2db880-e950-11ea-9203-72d2a68d4148.png">
 
-1. Download the [lib.zip](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.2/lib.zip).
+1. Download the [lib.zip](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.3/lib.zip).
    1. Extract the downloaded `lib.zip` file to the `<APP_HOME>/WEB-INF` directory. (If you already have a `lib` folder in
     your web app, merge the content of the downloaded `lib.zip` file into the existing `lib` folder.)
 

@@ -19,8 +19,8 @@ These instructions will guide you on integrating OpenID Connect into your Java a
 This allows an application (i.e. Service Provider) to connect with an IDP using the Asgardio Tomcat OIDC Agent for Java.
 
 A sample application is included in 
-https://github.com/asgardio/asgardio-tomcat-oidc-agent/tree/master/io.asgardio.tomcat.oidc.agent.sample [TODO update
- link] which we would use for the following section. 
+https://github.com/asgardio/asgardio-tomcat-oidc-agent/tree/master/io.asgardio.tomcat.oidc.sample
+ which we would use for the following section. 
 Here, we are using the sample as a reference only, we can follow the same approach to build our own app as well.
 The structure of the sample would be as follows:
 
@@ -31,7 +31,7 @@ The structure of the sample would be as follows:
 1. Starting with the pom.xml, the following dependencies should be added for the webApp to be using the SAML SDK.
       ```xml
       <dependency>
-          <groupId>io.asgardio.tomcat.oidc.agent/groupId>
+          <groupId>io.asgardio.tomcat.oidc.agent</groupId>
           <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
           <version>0.1.1</version>
       </dependency>
@@ -61,7 +61,7 @@ The structure of the sample would be as follows:
       trustedAudience=http://localhost:8080/sample-app
       signatureAlgorithm=RS256
       ```
-   A comprehensive list of the properties can be found in the configuration catalog [Link to config catalog].
+A comprehensive list of the properties can be found in the [Configuration Catalog](../io.asgardio.tomcat.oidc.sample/src/main/resources/configuration-catalog.md).
     These properties are required for the OIDC SDK to communicate with the WSO2 Identity Server.
 
 3. Next, we need to find and set JKS properties required for IS server communication.  For that, create a file named jks

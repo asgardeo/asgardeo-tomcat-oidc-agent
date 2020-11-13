@@ -37,7 +37,7 @@ You can experience the capabilities of Asgardio Tomcat OIDC Agent by following t
 2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
 
 ### Configuring the sample
-1. Download the [oidc-sample-app.war]((https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.2/oidc-sample-app.war).
+1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.2/oidc-sample-app.war).
 2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
 3. Add the entry `127.0.0.1   localhost.com` to the `/etc/hosts` file of your machine to configure the hostname.
 
@@ -156,13 +156,16 @@ To integrate the Tomcat OIDC Agent into your pre-built webapps, follow the guide
 To integrate the Tomcat OIDC Agent into your java source project, follow the guide [here](docs/integrating_with_java_source_project.md/#Integrating_OIDC_into_your_java_source_project).
 
 
-## Installing the Agent [TODO]
-
-### Github
-The SDK is hosted on github. You can download it from:
-- Latest release: [TODO]
-- Master repo: [TODO]
-
+## Installing the Agent
+### Maven
+Install it as a maven dependency:
+```
+<dependency>
+    <groupId>io.asgardio.tomcat.oidc.agent</groupId>
+    <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
+    <version>0.1.1</version>
+</dependency>
+```
 ### Building from the source
 
 If you want to build **asgardio-tomcat-oidc-agent** from the source code:
@@ -172,16 +175,6 @@ If you want to build **asgardio-tomcat-oidc-agent** from the source code:
 3. Get a clone or download the source from this repository (https://github.com/asgardio/asgardio-tomcat-oidc-agent.git)
 4. Run the Maven command ``mvn clean install`` from the ``asgardio-tomcat-oidc-agent`` directory.
 
-### Maven
-
-Install it as a maven dependency:
-```
-<dependency>
-    <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-    <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>0.1.1</version>
-</dependency>
-```
 
 ## Contributing
 

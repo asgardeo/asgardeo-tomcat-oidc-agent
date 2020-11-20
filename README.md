@@ -61,7 +61,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
    ![Claim Config](https://user-images.githubusercontent.com/15249242/90488235-38d45580-e159-11ea-8beb-52d6b5c35034.png)
 
 ### Configuring the sample
-1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.3/oidc-sample-app.war).
+1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.4/oidc-sample-app.war).
 2. Update the `consumerKey` and `consumerSecret` values in the `oidc-sample-app.properties` file in `<APP_HOME>/WEB-INF/classes` 
 directory with the `OAuth Client Key` and `OAuth Client Secret` values obtained after configuring an SP in
 Identity Server. Set `indexPage` value to `/oidc-sample-app/index.html`.
@@ -165,7 +165,7 @@ Install it as a maven dependency:
 <dependency>
     <groupId>io.asgardio.tomcat.oidc.agent</groupId>
     <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 ### Building from the source

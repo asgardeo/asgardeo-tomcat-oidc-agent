@@ -33,7 +33,7 @@ You can experience the capabilities of Asgardio Tomcat OIDC Agent by following t
   * [Running the sample](#running-the-sample)
 
 ### Prerequisites
-1. WSO2 Identity Server and it's [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
+1. WSO2 Identity Server and its [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
 2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
 
 ### Configuring the sample
@@ -184,7 +184,7 @@ Please read [Contributing to the Code Base](http://wso2.github.io/) for details 
 ### Reporting Issues
 We encourage you to report issues, improvements, and feature requests creating [git Issues](https://github.com/asgardio/asgardio-tomcat-oidc-agent/issues).
 
-Important: And please be advised that security issues must be reported to security@wso2.com, not as GitHub issues, 
+Important: Please be advised that security issues must be reported to security@wso2.com, not as GitHub issues, 
 in order to reach the proper audience. We strongly advise following the WSO2 Security Vulnerability Reporting Guidelines
  when reporting the security issues.
 

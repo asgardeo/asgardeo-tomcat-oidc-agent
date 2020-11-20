@@ -1,7 +1,7 @@
 ## Integrating OpenID Connect into your Java Source Project
 
 In this tutorial, we will see how you can integrate Asgardio Tomcat OIDC Agent into your Java source project.
-You can refer to the oidc-sample-app [Link] source code for a complete implementation.
+You can refer to the [oidc-sample-app source code](../io.asgardio.tomcat.oidc.sample) for a complete implementation.
 
   * [Prerequisites](#prerequisites)
   * [Configuring the sample](#configuring-the-sample)
@@ -28,7 +28,7 @@ The structure of the sample would be as follows:
 
 ### Configuring the sample
 
-1. Starting with the pom.xml, the following dependencies should be added for the webApp to be using the SAML SDK.
+1. Starting with the pom.xml, the following dependencies should be added for the webApp to be using the OIDC SDK.
       ```xml
       <dependency>
           <groupId>io.asgardio.tomcat.oidc.agent</groupId>
@@ -38,8 +38,8 @@ The structure of the sample would be as follows:
       ```
 
 2. Before the web.xml configurations, we will look at adding the resources files.
-   In the sample-app, create a file named sample-app.properties in the `src/main/resources` directory. The 
-   sample-app.properties file contains properties similar to the following:
+   In the oidc-sample-app, create a file named oidc-sample-app.properties in the `src/main/resources` directory. The 
+   oidc-sample-app.properties file contains properties similar to the following:
 
       ```text
       consumerKey=<OAuth Client Key>
@@ -146,7 +146,7 @@ Add the following snippet to enable logout from the secured page.
 ### Retrieving user attributes
 
 1. The web app needs to be configured to read the attributes sent from the Identity Server upon successful
- authentication. In the sample-app, we would customize the home.jsp file as follows to retrieve the user attributes.
+ authentication. In the oidc-sample-app, we would customize the home.jsp file as follows to retrieve the user attributes.
  
  First, we would need the following imports to be added to the home.jsp file.
  
@@ -182,7 +182,7 @@ Next, by adding the following snippets, we would be able to retrieve the user cl
      
     
       
-2. Then, we would use the `saml2SSOAttributes` in the **<APP_HOME>/home.jsp** to display the user attributes via a 
+2. Then, we would use the `customClaimValueMap` in the **<APP_HOME>/home.jsp** to display the user attributes via a 
 table:
 
       ```html

@@ -2,7 +2,7 @@
 ## Integrating OIDC into your Existing Webapp 
 
 ### Getting started
-Throughout this section we will refer to the existing web application as oidc-oidc-sample-app.
+Throughout this section we will refer to the existing web application as oidc-sample-app.
 
  
 #### Prerequisites

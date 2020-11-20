@@ -28,18 +28,13 @@ You can experience the capabilities of Asgardio Tomcat OIDC Agent by following t
  sections listed below.
 
   * [Prerequisites](#prerequisites)
-  * [Configuring the sample](#configuring-the-sample)
   * [Configuring Identity Server](#configuring-identity-server)
+  * [Configuring the sample](#configuring-the-sample)
   * [Running the sample](#running-the-sample)
 
 ### Prerequisites
-1. WSO2 Identity Server and it's [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
+1. WSO2 Identity Server and its [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
 2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
-
-### Configuring the sample
-1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.3/oidc-sample-app.war).
-2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
-3. Add the entry `127.0.0.1   localhost.com` to the `/etc/hosts` file of your machine to configure the hostname.
 
 ### Configuring Identity Server
 Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be configured with any other preferred
@@ -52,7 +47,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
     configuration,
    use following parameters and options,
      
-       Callback URL - http://localhost.com:8080/oidc-sample-app/oauth2client
+       Callback URL - regexp=(http://localhost:8080/oidc-sample-app/oauth2client|http://localhost:8080/oidc-sample-app/index.html)
 
 
    Keep the other default settings as it is and save the configuration.
@@ -65,10 +60,17 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
    See the example claim config below.
    ![Claim Config](https://user-images.githubusercontent.com/15249242/90488235-38d45580-e159-11ea-8beb-52d6b5c35034.png)
 
+### Configuring the sample
+1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.3/oidc-sample-app.war).
+2. Update the `consumerKey` and `consumerSecret` values in the `oidc-sample-app.properties` file in `<APP_HOME>/WEB-INF/classes` 
+directory with the `OAuth Client Key` and `OAuth Client Secret` values obtained after configuring an SP in
+Identity Server. Set `indexPage` value to `/oidc-sample-app/index.html`.
+2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
+
 ### Running the sample
-1. Try out the application by accessing the `http://localhost.com:8080/oidc-sample-app/index.html`.
+1. Try out the application by accessing the `http://localhost:8080/oidc-sample-app/index.html`.
  
-![Recordit GIF](http://g.recordit.co/BKqufkpZW1.gif)
+![Recordit GIF](https://user-images.githubusercontent.com/25479743/99786157-28f75380-2b44-11eb-97e1-4f505841ac26.gif)
 
 ## How it works
 
@@ -184,7 +186,7 @@ Please read [Contributing to the Code Base](http://wso2.github.io/) for details 
 ### Reporting Issues
 We encourage you to report issues, improvements, and feature requests creating [git Issues](https://github.com/asgardio/asgardio-tomcat-oidc-agent/issues).
 
-Important: And please be advised that security issues must be reported to security@wso2.com, not as GitHub issues, 
+Important: Please be advised that security issues must be reported to security@wso2.com, not as GitHub issues, 
 in order to reach the proper audience. We strongly advise following the WSO2 Security Vulnerability Reporting Guidelines
  when reporting the security issues.
 

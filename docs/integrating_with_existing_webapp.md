@@ -118,7 +118,7 @@ The index.html contains a login button which we would use to forward the user to
         </form>
       ```
 The home.jsp page is a page which we want to secure i.e. in case there are no active sessions, 
-the http://localhost.com:8080/oidc-sample-app/home.jsp should not be accessible. 
+the http://localhost:8080/oidc-sample-app/home.jsp should not be accessible. 
 In the sample we are using, if there is no active session in place, we would redirect the user for authentication. 
 
 ### Enable logout

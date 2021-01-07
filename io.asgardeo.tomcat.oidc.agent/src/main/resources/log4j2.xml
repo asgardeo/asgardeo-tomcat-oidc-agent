@@ -24,7 +24,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="io.asgardio.tomcat.oidc.agent" level="debug" additivity="false">
+        <Logger name="io.asgardeo.tomcat.oidc.agent" level="debug" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
         <Root level="error">

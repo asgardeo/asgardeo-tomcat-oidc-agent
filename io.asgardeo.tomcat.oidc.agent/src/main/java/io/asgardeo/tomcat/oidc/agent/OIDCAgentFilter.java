@@ -16,17 +16,17 @@
  * under the License.
  */
 
-package io.asgardio.tomcat.oidc.agent;
+package io.asgardeo.tomcat.oidc.agent;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
-import io.asgardio.java.oidc.sdk.HTTPSessionBasedOIDCProcessor;
-import io.asgardio.java.oidc.sdk.SSOAgentConstants;
-import io.asgardio.java.oidc.sdk.bean.SessionContext;
-import io.asgardio.java.oidc.sdk.config.model.OIDCAgentConfig;
-import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
-import io.asgardio.java.oidc.sdk.exception.SSOAgentException;
-import io.asgardio.java.oidc.sdk.exception.SSOAgentServerException;
-import io.asgardio.java.oidc.sdk.request.OIDCRequestResolver;
+import io.asgardeo.java.oidc.sdk.HTTPSessionBasedOIDCProcessor;
+import io.asgardeo.java.oidc.sdk.SSOAgentConstants;
+import io.asgardeo.java.oidc.sdk.bean.SessionContext;
+import io.asgardeo.java.oidc.sdk.config.model.OIDCAgentConfig;
+import io.asgardeo.java.oidc.sdk.exception.SSOAgentClientException;
+import io.asgardeo.java.oidc.sdk.exception.SSOAgentException;
+import io.asgardeo.java.oidc.sdk.exception.SSOAgentServerException;
+import io.asgardeo.java.oidc.sdk.request.OIDCRequestResolver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +48,7 @@ import javax.servlet.http.HttpSession;
 /**
  * OIDCAgentFilter is the Filter class responsible for building
  * requests and handling responses for authentication, SLO and session
- * management for the OpenID Connect flows, using the io-asgardio-oidc-sdk.
+ * management for the OpenID Connect flows, using the io-asgardeo-oidc-sdk.
  * It is an implementation of the base class, {@link Filter}.
  * OIDCAgentFilter verifies if:
  * <ul>

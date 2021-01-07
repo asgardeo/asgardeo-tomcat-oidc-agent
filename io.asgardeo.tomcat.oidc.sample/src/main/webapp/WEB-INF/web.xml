@@ -27,7 +27,7 @@
 
     <filter>
         <filter-name>OIDCAgentFilter</filter-name>
-        <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
+        <filter-class>io.asgardeo.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>OIDCAgentFilter</filter-name>
@@ -47,7 +47,7 @@
     </filter-mapping>
 
     <listener>
-        <listener-class>io.asgardio.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
+        <listener-class>io.asgardeo.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
     </listener>
     <context-param>
         <param-name>app-property-file</param-name>
@@ -55,7 +55,7 @@
     </context-param>
 
     <listener>
-        <listener-class>io.asgardio.tomcat.oidc.agent.JKSLoader</listener-class>
+        <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
     </listener>
     <context-param>
         <param-name>jks-property-file</param-name>

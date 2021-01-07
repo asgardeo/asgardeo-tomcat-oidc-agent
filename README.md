@@ -1,20 +1,20 @@
-# Asgardio Tomcat OIDC Agent
+# Asgardeo Tomcat OIDC Agent
 
 
-[![Build Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fwso2.org%2Fjenkins%2Fjob%2Fasgardio%2Fjob%2Fasgardio-tomcat-oidc-agent%2F&style=flat)](https://wso2.org/jenkins/job/asgardio/job/asgardio-tomcat-oidc-agent/)
+[![Build Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fwso2.org%2Fjenkins%2Fjob%2Fasgardeo%2Fjob%2Fasgardeo-tomcat-oidc-agent%2F&style=flat)](https://wso2.org/jenkins/job/asgardeo/job/asgardeo-tomcat-oidc-agent/)
 [![Stackoverflow](https://img.shields.io/badge/Ask%20for%20help%20on-Stackoverflow-orange)](https://stackoverflow.com/questions/tagged/wso2is)
 [![Join the chat at https://join.slack.com/t/wso2is/shared_invite/enQtNzk0MTI1OTg5NjM1LTllODZiMTYzMmY0YzljYjdhZGExZWVkZDUxOWVjZDJkZGIzNTE1NDllYWFhM2MyOGFjMDlkYzJjODJhOWQ4YjE](https://img.shields.io/badge/Join%20us%20on-Slack-%23e01563.svg)](https://join.slack.com/t/wso2is/shared_invite/enQtNzk0MTI1OTg5NjM1LTllODZiMTYzMmY0YzljYjdhZGExZWVkZDUxOWVjZDJkZGIzNTE1NDllYWFhM2MyOGFjMDlkYzJjODJhOWQ4YjE)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/wso2/product-is/blob/master/LICENSE)
 [![Twitter](https://img.shields.io/twitter/follow/wso2.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=wso2)
 ---
 
-The Asgardio Tomcat OIDC Agent enables you to add OIDC-based login, logout to your Apache Tomcat web apps with
+The Asgardeo Tomcat OIDC Agent enables you to add OIDC-based login, logout to your Apache Tomcat web apps with
  minimum hassle.
 
 
 - [Getting Started](#getting-started)
 - [How it works](#how-it-works)
-- [Integrating Asgardio Tomcat OIDC Agent](#integrating-asgardio-tomcat-oidc-agent)
+- [Integrating Asgardeo Tomcat OIDC Agent](#integrating-asgardeo-tomcat-oidc-agent)
   * [To your existing webapp](#to-your-existing-webapp)
   * [To your Java source project](#to-your-java-source-project)
 - [Building from the source](#building-from-the-source)
@@ -24,7 +24,7 @@ The Asgardio Tomcat OIDC Agent enables you to add OIDC-based login, logout to yo
 
 ## Getting started
 
-You can experience the capabilities of Asgardio Tomcat OIDC Agent by following this small guide which contains main
+You can experience the capabilities of Asgardeo Tomcat OIDC Agent by following this small guide which contains main
  sections listed below.
 
   * [Prerequisites](#prerequisites)
@@ -61,7 +61,7 @@ Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be
    ![Claim Config](https://user-images.githubusercontent.com/15249242/90488235-38d45580-e159-11ea-8beb-52d6b5c35034.png)
 
 ### Configuring the sample
-1. Download the [oidc-sample-app.war](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.4/oidc-sample-app.war).
+1. Download the [oidc-sample-app.war](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/releases/download/v0.1.4/oidc-sample-app.war).
 2. Update the `consumerKey` and `consumerSecret` values in the `oidc-sample-app.properties` file in `<APP_HOME>/WEB-INF/classes` 
 directory with the `OAuth Client Key` and `OAuth Client Secret` values obtained after configuring an SP in
 Identity Server. Set `indexPage` value to `/oidc-sample-app/index.html`.
@@ -74,7 +74,7 @@ Identity Server. Set `indexPage` value to `/oidc-sample-app/index.html`.
 
 ## How it works
 
-This section contains a detailed walk-through on how the Asgardio Tomcat OIDC Agent is handling key aspects of the
+This section contains a detailed walk-through on how the Asgardeo Tomcat OIDC Agent is handling key aspects of the
  web app.
 
   * [Classify secure resources, unsecured resources](#classify-secure-resources-unsecured-resources)
@@ -141,9 +141,9 @@ Clicking on the logout link would trigger the logout flow engaging the same **OI
 After successful logout, the user would be redirected to the page configured via the `indexPage` property previously
  discussed.
 
-## Integrating Asgardio Tomcat OIDC Agent
+## Integrating Asgardeo Tomcat OIDC Agent
 
-Asgardio Tomcat OIDC Agent can be integrated in to your applications in two different ways. 
+Asgardeo Tomcat OIDC Agent can be integrated in to your applications in two different ways. 
 
 It can be integrated to your java source project of the webapp when the web application is in development stage.
 
@@ -163,19 +163,19 @@ To integrate the Tomcat OIDC Agent into your java source project, follow the gui
 Install it as a maven dependency:
 ```
 <dependency>
-    <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-    <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-    <version>0.1.4</version>
+    <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
+    <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
+    <version>0.1.5</version>
 </dependency>
 ```
 ### Building from the source
 
-If you want to build **asgardio-tomcat-oidc-agent** from the source code:
+If you want to build **asgardeo-tomcat-oidc-agent** from the source code:
 
 1. Install Java 8
 2. Install Apache Maven 3.x.x (https://maven.apache.org/download.cgi#)
-3. Get a clone or download the source from this repository (https://github.com/asgardio/asgardio-tomcat-oidc-agent.git)
-4. Run the Maven command ``mvn clean install`` from the ``asgardio-tomcat-oidc-agent`` directory.
+3. Get a clone or download the source from this repository (https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git)
+4. Run the Maven command ``mvn clean install`` from the ``asgardeo-tomcat-oidc-agent`` directory.
 
 
 ## Contributing
@@ -184,7 +184,7 @@ Please read [Contributing to the Code Base](http://wso2.github.io/) for details 
  process for submitting pull requests to us.
  
 ### Reporting Issues
-We encourage you to report issues, improvements, and feature requests creating [git Issues](https://github.com/asgardio/asgardio-tomcat-oidc-agent/issues).
+We encourage you to report issues, improvements, and feature requests creating [git Issues](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/issues).
 
 Important: Please be advised that security issues must be reported to security@wso2.com, not as GitHub issues, 
 in order to reach the proper audience. We strongly advise following the WSO2 Security Vulnerability Reporting Guidelines
@@ -192,12 +192,12 @@ in order to reach the proper audience. We strongly advise following the WSO2 Sec
 
 ## Versioning
 
-For the versions available, see the [tags on this repository](https://github.com/asgardio/asgardio-tomcat-oidc-agent/tags). 
+For the versions available, see the [tags on this repository](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/tags). 
 
 ## Authors
 
 
-See also the list of [contributors](https://github.com/asgardio/asgardio-tomcat-oidc-agent/graphs/contributors) who
+See also the list of [contributors](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/graphs/contributors) who
  participated in this project.
 
 ## License

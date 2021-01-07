@@ -1,6 +1,6 @@
 # Configuration Catalog
 
-This document describes all the configuration parameters that are used in Asgardio OIDC Agent.
+This document describes all the configuration parameters that are used in Asgardeo OIDC Agent.
 
 ## Required Parameters
 ### Consumer Key / Client ID

@@ -16,9 +16,9 @@
   ~ under the License.
   --%>
 
-<%@page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
-<%@page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
-<%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
+<%@page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
+<%@page import="io.asgardeo.java.oidc.sdk.bean.SessionContext" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.bean.User" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 

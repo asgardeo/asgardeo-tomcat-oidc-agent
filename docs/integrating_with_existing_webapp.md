@@ -8,7 +8,7 @@ Throughout this section we will refer to the existing web application as oidc-sa
 #### Prerequisites
 1. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher
 
-These instructions will guide you on integrating OIDC into your Java application with the Asgardio OIDC SDK.
+These instructions will guide you on integrating OIDC into your Java application with the Asgardeo OIDC SDK.
 This allows the developers to turn a Java application into a SP (Service Provider) that can be connected to an IdP
  (Identity Provider) which can then be secured with OIDC.
 
@@ -18,7 +18,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
 
 <img width="326" alt="structure" src="https://user-images.githubusercontent.com/25428696/91556626-aa2db880-e950-11ea-9203-72d2a68d4148.png">
 
-1. Download the [lib.zip](https://github.com/asgardio/asgardio-tomcat-oidc-agent/releases/download/v0.1.4/lib.zip).
+1. Download the [lib.zip](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/releases/download/v0.1.4/lib.zip).
    1. Extract the downloaded `lib.zip` file to the `<APP_HOME>/WEB-INF` directory. (If you already have a `lib` folder in
     your web app, merge the content of the downloaded `lib.zip` file into the existing `lib` folder.)
 
@@ -70,7 +70,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
         
             <filter>
                 <filter-name>OIDCAgentFilter</filter-name>
-                <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
+                <filter-class>io.asgardeo.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
             </filter>
             <filter-mapping>
                 <filter-name>OIDCAgentFilter</filter-name>
@@ -90,7 +90,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
             </filter-mapping>
         
             <listener>
-                <listener-class>io.asgardio.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
+                <listener-class>io.asgardeo.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
             </listener>
             <context-param>
                 <param-name>app-property-file</param-name>
@@ -98,7 +98,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
             </context-param>
         
             <listener>
-                <listener-class>io.asgardio.tomcat.oidc.agent.JKSLoader</listener-class>
+                <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
             </listener>
             <context-param>
                 <param-name>jks-property-file</param-name>
@@ -137,9 +137,9 @@ In the sample we are using, if there is no active session in place, we would red
  
        <%@page import="java.util.HashMap" %>
        <%@page import="java.util.Map" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.bean.User" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.bean.SessionContext" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
        
 Next, by adding the following snippets, we would be able to retrieve the user claims as provided by the Identity Provider.
 

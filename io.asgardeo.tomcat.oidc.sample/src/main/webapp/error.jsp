@@ -16,8 +16,8 @@
   ~ under the License.
   --%>
 
-<%@ page import="io.asgardio.java.oidc.sdk.exception.SSOAgentException" %>
-<%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.exception.SSOAgentException" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>

@@ -20,24 +20,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>tomcat-oidc-agent</artifactId>
-        <groupId>io.asgardio.tomcat.oidc.agent</groupId>
+        <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
         <version>0.1.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>io.asgardio.tomcat.oidc.sample</artifactId>
+    <artifactId>io.asgardeo.tomcat.oidc.sample</artifactId>
     <packaging>war</packaging>
-    <name>Asgardio - Tomcat OIDC Sample</name>
+    <name>Asgardeo - Tomcat OIDC Sample</name>
     <description>
-        Asgardio Tomcat Agent Sample for OIDC
+        Asgardeo Tomcat Agent Sample for OIDC
     </description>
-    <url>http://asgardio.io</url>
+    <url>http://asgardeo.io</url>
 
     <dependencies>
         <dependency>
-            <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-            <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
+            <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
+            <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
         </dependency>
     </dependencies>
 

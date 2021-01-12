@@ -1,7 +1,7 @@
 ## Integrating OpenID Connect into your Java Source Project
 
-In this tutorial, we will see how you can integrate Asgardio Tomcat OIDC Agent into your Java source project.
-You can refer to the [oidc-sample-app source code](../io.asgardio.tomcat.oidc.sample) for a complete implementation.
+In this tutorial, we will see how you can integrate Asgardeo Tomcat OIDC Agent into your Java source project.
+You can refer to the [oidc-sample-app source code](../io.asgardeo.tomcat.oidc.sample) for a complete implementation.
 
   * [Prerequisites](#prerequisites)
   * [Configuring the sample](#configuring-the-sample)
@@ -14,12 +14,12 @@ Throughout this section we will refer to the Identity Server installation direct
 ### Prerequisites
 1. [Maven](https://maven.apache.org/download.cgi) 3.6.x or higher
 
-These instructions will guide you on integrating OpenID Connect into your Java application with the Asgardio Tomcat OIDC
+These instructions will guide you on integrating OpenID Connect into your Java application with the Asgardeo Tomcat OIDC
  Agent for Java.
-This allows an application (i.e. Service Provider) to connect with an IDP using the Asgardio Tomcat OIDC Agent for Java.
+This allows an application (i.e. Service Provider) to connect with an IDP using the Asgardeo Tomcat OIDC Agent for Java.
 
 A sample application is included in 
-https://github.com/asgardio/asgardio-tomcat-oidc-agent/tree/master/io.asgardio.tomcat.oidc.sample
+https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/tree/master/io.asgardeo.tomcat.oidc.sample
  which we would use for the following section. 
 Here, we are using the sample as a reference only, we can follow the same approach to build our own app as well.
 The structure of the sample would be as follows:
@@ -31,9 +31,9 @@ The structure of the sample would be as follows:
 1. Starting with the pom.xml, the following dependencies should be added for the webApp to be using the OIDC SDK.
       ```xml
       <dependency>
-          <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-          <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
-          <version>0.1.4</version>
+          <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
+          <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
+          <version>0.1.5</version>
       </dependency>
       ```
 
@@ -61,7 +61,7 @@ The structure of the sample would be as follows:
       trustedAudience=http://localhost:8080/sample-app
       signatureAlgorithm=RS256
       ```
-A comprehensive list of the properties can be found in the [Configuration Catalog](../io.asgardio.tomcat.oidc.sample/src/main/resources/configuration-catalog.md).
+A comprehensive list of the properties can be found in the [Configuration Catalog](../io.asgardeo.tomcat.oidc.sample/src/main/resources/configuration-catalog.md).
     These properties are required for the OIDC SDK to communicate with the WSO2 Identity Server.
 
 3. Next, we need to find and set JKS properties required for IS server communication.  For that, create a file named jks
@@ -88,7 +88,7 @@ A comprehensive list of the properties can be found in the [Configuration Catalo
      
          <filter>
              <filter-name>OIDCAgentFilter</filter-name>
-             <filter-class>io.asgardio.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
+             <filter-class>io.asgardeo.tomcat.oidc.agent.OIDCAgentFilter</filter-class>
          </filter>
          <filter-mapping>
              <filter-name>OIDCAgentFilter</filter-name>
@@ -108,7 +108,7 @@ A comprehensive list of the properties can be found in the [Configuration Catalo
          </filter-mapping>
      
          <listener>
-             <listener-class>io.asgardio.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
+             <listener-class>io.asgardeo.tomcat.oidc.agent.SSOAgentContextEventListener</listener-class>
          </listener>
          <context-param>
              <param-name>app-property-file</param-name>
@@ -116,7 +116,7 @@ A comprehensive list of the properties can be found in the [Configuration Catalo
          </context-param>
      
          <listener>
-             <listener-class>io.asgardio.tomcat.oidc.agent.JKSLoader</listener-class>
+             <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
          </listener>
          <context-param>
              <param-name>jks-property-file</param-name>
@@ -152,9 +152,9 @@ Add the following snippet to enable logout from the secured page.
  
        <%@page import="java.util.HashMap" %>
        <%@page import="java.util.Map" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.bean.User" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.bean.SessionContext" %>
-       <%@ page import="io.asgardio.java.oidc.sdk.SSOAgentConstants" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.bean.User" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.bean.SessionContext" %>
+       <%@ page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
         
 Next, by adding the following snippets, we would be able to retrieve the user claims as provided by the Identity Provider.
      

@@ -16,10 +16,10 @@
  * under the License.
  */
 
-package io.asgardio.tomcat.oidc.agent;
+package io.asgardeo.tomcat.oidc.agent;
 
-import io.asgardio.java.oidc.sdk.SSOAgentConstants;
-import io.asgardio.java.oidc.sdk.exception.SSOAgentClientException;
+import io.asgardeo.java.oidc.sdk.SSOAgentConstants;
+import io.asgardeo.java.oidc.sdk.exception.SSOAgentClientException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

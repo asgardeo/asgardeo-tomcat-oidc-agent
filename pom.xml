@@ -23,25 +23,25 @@
         <version>1.2</version>
     </parent>
 
-    <groupId>io.asgardio.tomcat.oidc.agent</groupId>
+    <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
     <modules>
-        <module>io.asgardio.tomcat.oidc.agent</module>
-        <module>io.asgardio.tomcat.oidc.sample</module>
+        <module>io.asgardeo.tomcat.oidc.agent</module>
+        <module>io.asgardeo.tomcat.oidc.sample</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tomcat-oidc-agent</artifactId>
     <version>0.1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Asgardio - Tomcat OIDC Agent Parent Module</name>
+    <name>Asgardeo - Tomcat OIDC Agent Parent Module</name>
     <description>
-        Asgardio Tomcat Agent for OIDC
+        Asgardeo Tomcat Agent for OIDC
     </description>
-    <url>http://asgardio.io</url>
+    <url>http://asgardeo.io</url>
 
     <scm>
-        <url>https://github.com/asgardio/asgardio-tomcat-oidc-agent.git</url>
-        <developerConnection>scm:git:https://github.com/asgardio/asgardio-tomcat-oidc-agent.git</developerConnection>
-        <connection>scm:git:https://github.com/asgardio/asgardio-tomcat-oidc-agent.git</connection>
+        <url>https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</url>
+        <developerConnection>scm:git:https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</developerConnection>
+        <connection>scm:git:https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</connection>
         <tag>HEAD</tag>
     </scm>
 
@@ -118,13 +118,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.asgardio.java.oidc.sdk</groupId>
-                <artifactId>io.asgardio.java.oidc.sdk</artifactId>
-                <version>${io.asgardio.java.oidc.sdk.version}</version>
+                <groupId>io.asgardeo.java.oidc.sdk</groupId>
+                <artifactId>io.asgardeo.java.oidc.sdk</artifactId>
+                <version>${io.asgardeo.java.oidc.sdk.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.asgardio.tomcat.oidc.agent</groupId>
-                <artifactId>io.asgardio.tomcat.oidc.agent</artifactId>
+                <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
+                <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -189,7 +189,7 @@
     </build>
 
     <properties>
-        <io.asgardio.java.oidc.sdk.version>0.1.0</io.asgardio.java.oidc.sdk.version>
+        <io.asgardeo.java.oidc.sdk.version>0.1.4</io.asgardeo.java.oidc.sdk.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
         <xerces.version>2.11.0</xerces.version>
     </properties>

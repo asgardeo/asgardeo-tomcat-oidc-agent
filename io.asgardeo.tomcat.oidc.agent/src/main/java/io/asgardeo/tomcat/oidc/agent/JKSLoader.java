@@ -58,8 +58,8 @@ public class JKSLoader implements ServletContextListener {
             if (StringUtils.isNotBlank(propertyFileName)) {
                 jksInputStream = this.getClass().getClassLoader().getResourceAsStream(propertyFileName);
             } else {
-                throw new SSOAgentClientException(SSOAgentConstants.JKS_PROPERTY_FILE_PARAMETER_NAME
-                        + " context-param is not specified in the web.xml");
+                logger.log(Level.INFO, "Could not locate a jks.properties configuration in the web.xml.");
+                return;
             }
 
             if (jksInputStream == null) {
@@ -79,9 +79,11 @@ public class JKSLoader implements ServletContextListener {
                 System.setProperty("javax.net.ssl.trustStore", resource.getPath());
                 System.setProperty("javax.net.ssl.trustStorePassword",
                         jksProperties.getProperty(SSOAgentConstants.KEYSTORE_PASSWORD));
+            } else {
+                logger.log(Level.INFO, "Could not locate a keystore file defined in jks.properties.");
             }
 
-        } catch (IOException | SSOAgentClientException e) {
+        } catch (IOException e) {
             logger.log(Level.FATAL, "Error while loading properties.", e);
             return;
         }

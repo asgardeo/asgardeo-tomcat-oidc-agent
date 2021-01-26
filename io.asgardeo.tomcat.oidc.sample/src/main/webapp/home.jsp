@@ -105,10 +105,12 @@
             <p align="center">No user details Available. Configure SP Claim Configurations.</p>
             <% } %>
         </div>
-        
-        <div class="element-padding">
-            <a href='logout'>Logout</a>
-        </div>
+    
+        <form action="logout" method="get">
+            <div class="element-padding">
+                <input style="height: 30px; width: 60px" type="submit" value="log out">
+            </div>
+        </form>
     </div>
 </main>
 </body>

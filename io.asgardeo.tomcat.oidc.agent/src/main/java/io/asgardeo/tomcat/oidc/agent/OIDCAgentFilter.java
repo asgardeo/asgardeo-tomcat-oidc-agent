@@ -25,7 +25,6 @@ import io.asgardeo.java.oidc.sdk.bean.SessionContext;
 import io.asgardeo.java.oidc.sdk.config.model.OIDCAgentConfig;
 import io.asgardeo.java.oidc.sdk.exception.SSOAgentClientException;
 import io.asgardeo.java.oidc.sdk.exception.SSOAgentException;
-import io.asgardeo.java.oidc.sdk.exception.SSOAgentServerException;
 import io.asgardeo.java.oidc.sdk.request.OIDCRequestResolver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -111,6 +110,7 @@ public class OIDCAgentFilter implements Filter {
                 oidcManager.handleOIDCCallback(request, response);
             } catch (SSOAgentException e) {
                 handleException(request, response, e);
+                return;
             }
             response.sendRedirect("home.jsp");
             return;
@@ -171,6 +171,6 @@ public class OIDCAgentFilter implements Filter {
         if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
             return oidcAgentConfig.getIndexPage();
         }
-        return request.getContextPath();
+        return SSOAgentConstants.DEFAULT_CONTEXT_ROOT;
     }
 }

@@ -189,7 +189,7 @@
     </build>
 
     <properties>
-        <io.asgardeo.java.oidc.sdk.version>0.1.7</io.asgardeo.java.oidc.sdk.version>
+        <io.asgardeo.java.oidc.sdk.version>0.1.8</io.asgardeo.java.oidc.sdk.version>
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
         <xerces.version>2.11.0</xerces.version>
     </properties>

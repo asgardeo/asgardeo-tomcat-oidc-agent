@@ -40,78 +40,53 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Home</title>
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            flex-direction: column;
-            display: flex;
-        }
-
-        main {
-            flex-shrink: 0;
-        }
-
-        main.center-segment {
-            margin: auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .element-padding {
-            margin: auto;
-            padding: 15px;
-        }
-
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="theme.css">
 </head>
 <body>
-<main class="center-segment">
-    <div style="text-align: center">
-        <div class="element-padding">
-            <h1>OIDC Sample App Home Page!</h1>
+
+    <div class="ui two column centered grid">
+        <div class="column center aligned">
+            <img src="images/logo-dark.svg" class="logo-image">
         </div>
-        
-        <div class="element-padding">
-            <h1>Hi <%=name%>
-            </h1>
-        </div>
-        
-        <% if (!customClaimValueMap.isEmpty()) { %>
-        <div class="element-padding">
-            <div class="element-padding">
-                <h3 align="center">User Details</h3>
+        <div class="container">
+            <div class="header-title">
+                <h1>
+                    Java-Based OIDC Authentication Sample <br> (OIDC - Authorization Code Grant)
+                </h1>
             </div>
-            <table class="center">
-                <tbody>
-                <% for (String claim : customClaimValueMap.keySet()) { %>
-                <tr>
-                    <td><%=claim%>
-                    </td>
-                    <td><%=customClaimValueMap.get(claim).toString()%>
-                    </td>
-                </tr>
+            <div class="content">
+                <h2>
+                    Hi <%=name%>
+                </h2>
+                <% if (!customClaimValueMap.isEmpty()) { %>
+                <h3>
+                    User Details
+                </h3>
+                <div>
+                    <% for (String claim : customClaimValueMap.keySet()) { %>
+                    <dl class="details">
+                        <dt><b><%=claim%>: </b><%=customClaimValueMap.get(claim).toString()%></dt>
+                    </dl> 
+                    <% } %>
+                <% } else { %>
+                    <h3>
+                        No user details Available. Configure SP Claim Configurations.
+                    </h3>
                 <% } %>
-                </tbody>
-            </table>
-            <% } else { %>
-            <p align="center">No user details Available. Configure SP Claim Configurations.</p>
-            <% } %>
-        </div>
-    
-        <form action="logout" method="get">
-            <div class="element-padding">
-                <input style="height: 30px; width: 60px" type="submit" value="log out">
+
+                </div>
+                <form action="logout" method="GET">
+                    <div class="element-padding">
+                        <button class="btn primary" onClick="location.href=logout?SAML2.HTTPBinding=HTTP-POST" type="submit">Logout</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+        <img src="images/footer.png" class="footer-image">
     </div>
-</main>
+
 </body>
 </html>

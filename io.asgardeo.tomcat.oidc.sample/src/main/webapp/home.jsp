@@ -80,7 +80,7 @@
                 </div>
                 <form action="logout" method="GET">
                     <div class="element-padding">
-                        <button class="btn primary" onClick="location.href=logout?SAML2.HTTPBinding=HTTP-POST" type="submit">Logout</button>
+                        <button class="btn primary" type="submit">Logout</button>
                     </div>
                 </form>
             </div>

@@ -61,22 +61,36 @@
                 <h2>
                     Hi <%=name%>
                 </h2>
-                <% if (!customClaimValueMap.isEmpty()) { %>
-                <h3>
-                    User Details
-                </h3>
-                <div>
-                    <% for (String claim : customClaimValueMap.keySet()) { %>
-                    <dl class="details">
-                        <dt><b><%=claim%>: </b><%=customClaimValueMap.get(claim).toString()%></dt>
-                    </dl> 
-                    <% } %>
-                <% } else { %>
-                    <h3>
-                        No user details Available. Configure SP Claim Configurations.
-                    </h3>
-                <% } %>
-
+                <%
+                    if (customClaimValueMap.size() > 2) {
+                %>
+                <h3>Available user attributes</h3>
+                <table>
+                    <tr>
+                        <th>User attribute name</th>
+                        <th>Value</th>
+                    </tr>
+                    <%
+                        for (String claim : customClaimValueMap.keySet()) {
+                            if (!claim.equals("isk") && !claim.equals("nonce")) {
+                    %>
+                    <tr>
+                        <td><%=claim%></td>
+                        <td><%=customClaimValueMap.get(claim).toString()%></td>
+                    </tr>
+                    <%
+                            }
+                        }
+                    %>
+                </table>
+                <%
+                } else {
+                %>
+                <h3>There are no user attributes selected to the application at the moment.</h3>
+                <%
+                    }
+                %>
+                
                 </div>
                 <form action="logout" method="GET">
                     <div class="element-padding">

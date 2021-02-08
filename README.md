@@ -165,7 +165,7 @@ Install it as a maven dependency:
 <dependency>
     <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
     <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
-    <version>0.1.8</version>
+    <version>0.1.9</version>
 </dependency>
 ```
 ### Building from the source

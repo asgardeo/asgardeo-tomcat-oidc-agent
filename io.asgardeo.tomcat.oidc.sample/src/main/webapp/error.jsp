@@ -23,47 +23,37 @@
 <head>
     <meta charset="UTF-8">
     <title>An error has occurred</title>
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            flex-direction: column;
-            display: flex;
-        }
-
-        main {
-            flex-shrink: 0;
-        }
-
-        main.center-segment {
-            margin: auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .element-padding {
-            margin: auto;
-            padding: 15px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="theme.css">
 </head>
 <%
     SSOAgentException exception = (SSOAgentException) request.getAttribute(SSOAgentConstants.AGENT_EXCEPTION);
 %>
 <body>
-<main class="center-segment">
-    <div class="element-padding">
-        <div class="element-padding">
-            <h3>
-                An error has occurred!
-            </h3>
+    <div class="ui two column centered grid">
+        <div class="column center aligned">
+            <img src="images/logo-dark.svg" class="logo-image">
         </div>
-        <div class="element-padding">
-            <%=exception.getMessage()%>
+        <div class="container">
+            <div class="header-title">
+                <h1>
+                    Java-Based OIDC Authentication Sample<br>
+                    (OIDC - Authorization Code Grant)
+                </h1>
+            </div>
+            <div class="content">
+                <h2>
+                    An error has occurred!
+                </h2>
+                <h3>
+                    <%=exception.getMessage()%>
+                </h3>
+            </div>
         </div>
+        <img src="images/footer.png" class="footer-image">
     </div>
-</main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
 </body>
 </html>

@@ -34,7 +34,9 @@ You can experience the capabilities of Asgardeo Tomcat OIDC Agent by following t
 
 ### Prerequisites
 1. WSO2 Identity Server and its [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
-2. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher.
+2. [Apache Tomcat](https://tomcat.apache.org/tomcat-9.0-doc/) 8.x or 9.x.
+> **NOTE**  
+> If you are using Apache Tomcat 10 or a later version, use [this conversion](https://tomcat.apache.org/download-migration.cgi) tool to change the namespaces of the web application. This is necessary because of the namespace changes introduced in Tomcat 10.
 
 ### Configuring Identity Server
 Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be configured with any other preferred

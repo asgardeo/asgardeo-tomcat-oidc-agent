@@ -6,7 +6,9 @@ Throughout this section we will refer to the existing web application as oidc-sa
 
  
 #### Prerequisites
-1. [Apache Tomcat](http://tomcat.apache.org/tomcat-8.5-doc/) 8.x or higher
+1. [Apache Tomcat](https://tomcat.apache.org/tomcat-9.0-doc/) 8.x or 9.x
+> **NOTE**  
+> If you are using Apache Tomcat 10 or a later version, use [this conversion](https://tomcat.apache.org/download-migration.cgi) tool to change the namespaces of the web application. This is necessary because of the namespace changes introduced in Tomcat 10.
 
 These instructions will guide you on integrating OIDC into your Java application with the Asgardeo OIDC SDK.
 This allows the developers to turn a Java application into a SP (Service Provider) that can be connected to an IdP

@@ -49,6 +49,11 @@
                     <%=exception.getMessage()%>
                 </h3>
             </div>
+            <form action="index.html" method="post">
+                <div class="element-padding">
+                    <button class="btn primary" type="submit">Back</button>
+                </div>
+            </form>
         </div>
         <img src="images/footer.png" class="footer-image">
     </div>

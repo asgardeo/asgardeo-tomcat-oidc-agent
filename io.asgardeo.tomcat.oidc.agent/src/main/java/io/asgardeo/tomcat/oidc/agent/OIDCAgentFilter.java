@@ -44,8 +44,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import static io.asgardeo.java.oidc.sdk.SSOAgentConstants.IS_LOGOUT;
-
 /**
  * OIDCAgentFilter is the Filter class responsible for building
  * requests and handling responses for authentication, SLO and session
@@ -114,9 +112,8 @@ public class OIDCAgentFilter implements Filter {
                 handleException(request, response, e);
                 return;
             }
-            // Check for logout scenario
-            if (request.getAttribute(IS_LOGOUT) != null && ((boolean)request.getAttribute(IS_LOGOUT))) {
-                request.getSession().invalidate();
+            // Check for logout scenario.
+            if (requestResolver.isLogout()) {
                 response.sendRedirect(oidcAgentConfig.getIndexPage());
                 return;
             }

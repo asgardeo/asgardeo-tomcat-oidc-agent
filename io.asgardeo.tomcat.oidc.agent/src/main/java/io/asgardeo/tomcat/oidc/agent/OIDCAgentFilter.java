@@ -112,6 +112,11 @@ public class OIDCAgentFilter implements Filter {
                 handleException(request, response, e);
                 return;
             }
+            // Check for logout scenario.
+            if (requestResolver.isLogout()) {
+                response.sendRedirect(oidcAgentConfig.getIndexPage());
+                return;
+            }
             response.sendRedirect("home.jsp");
             return;
         }
@@ -168,7 +173,9 @@ public class OIDCAgentFilter implements Filter {
 
     private String buildErrorPageURL(OIDCAgentConfig oidcAgentConfig, HttpServletRequest request) {
 
-        if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
+        if (StringUtils.isNotBlank(oidcAgentConfig.getErrorPage())) {
+            return oidcAgentConfig.getErrorPage();
+        } else if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
             return oidcAgentConfig.getIndexPage();
         }
         return SSOAgentConstants.DEFAULT_CONTEXT_ROOT;

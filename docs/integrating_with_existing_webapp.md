@@ -36,7 +36,7 @@ The structure of the oidc-sample-app we are configuring would be as follows:
         errorPage=
         logoutURL=logout
         callBackURL=http://localhost:8080/oidc-sample-app/oauth2client
-        scope=openid,internal_application_mgt_view
+        scope=openid,address,email,internal_application_mgt_view
         #grantType=code
         authorizeEndpoint=https://localhost:9443/oauth2/authorize
         logoutEndpoint=https://localhost:9443/oidc/logout

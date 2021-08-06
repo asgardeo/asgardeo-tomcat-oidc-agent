@@ -25,6 +25,7 @@
     <title>An error has occurred</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <%
     SSOAgentException exception = (SSOAgentException) request.getAttribute(SSOAgentConstants.AGENT_EXCEPTION);
@@ -48,6 +49,22 @@
                 <h3>
                     <%=exception.getMessage()%>
                 </h3>
+            </div>
+            <div class="message">
+                <div class="banner">
+                    <span><i class="fa fa-exclamation-circle icon"></i></span>
+                    <div><b>It's possible that you tried an unsupported feature with the sample application.
+                    Currently the below features are supported by this version of the sample 
+                    application</b></div>
+                </div>
+                <ul>
+                    <li>OIDC single sign on</li>
+                    <li>OIDC front channel/ back channel logout</li>
+                    <li>OIDC Signature validation</li>
+                    <li>Scope Validation</li>
+                    <li>Token Binding</li>
+                    <li>PKCE</li>
+                </ul> 
             </div>
             <form action="index.html" method="post">
                 <div class="element-padding">

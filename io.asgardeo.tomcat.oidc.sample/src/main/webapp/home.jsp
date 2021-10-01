@@ -21,12 +21,17 @@
 <%@ page import="io.asgardeo.java.oidc.sdk.bean.User" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="net.minidev.json.JSONObject" %>
+<%@ page import="com.nimbusds.jwt.SignedJWT" %>
 
 <%
     final HttpSession currentSession = request.getSession(false);
     final SessionContext sessionContext = (SessionContext)
             currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
     final String idToken = sessionContext.getIdToken();
+
+    SignedJWT signedJWTIdToken = SignedJWT.parse(idToken);
+    String payload = signedJWTIdToken.getJWTClaimsSet().toString();
     
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();
@@ -59,38 +64,11 @@
             </div>
             <div class="content">
                 <h2>
-                    Hi <%=name%>
+                    If you see this page, it means that your connection works.<br>
+                    This is the user profile the application will receive.
                 </h2>
-                <%
-                    if (customClaimValueMap.size() > 2) {
-                %>
-                <h3>Available user attributes</h3>
-                <table>
-                    <tr>
-                        <th>User attribute name</th>
-                        <th>Value</th>
-                    </tr>
-                    <%
-                        for (String claim : customClaimValueMap.keySet()) {
-                            if (!claim.equals("isk") && !claim.equals("nonce")) {
-                    %>
-                    <tr>
-                        <td><%=claim%></td>
-                        <td><%=customClaimValueMap.get(claim).toString()%></td>
-                    </tr>
-                    <%
-                            }
-                        }
-                    %>
-                </table>
-                <%
-                } else {
-                %>
-                <h3>There are no user attributes selected to the application at the moment.</h3>
-                <%
-                    }
-                %>
-                
+                <div class="json">
+                    <div id="authentication-response" class="json-container"></div>
                 </div>
                 <form action="logout" method="GET">
                     <div class="element-padding">
@@ -101,6 +79,18 @@
         </div>
         <img src="images/footer.png" class="footer-image">
     </div>
+    <script src="https://unpkg.com/json-formatter-js@latest/dist/json-formatter.umd.js"></script>
+
+    <script>
+        var payload = '<%=payload %>';
+        var payloadObject = JSON.parse(payload);
+
+        var authenticationResponseViewBox = document.getElementById("authentication-response");
+        authenticationResponseViewBox.innerHTML = "";
+
+        var formattedAuthenticateResponse = new JSONFormatter(payloadObject, 1, { theme: "dark" });
+        authenticationResponseViewBox.appendChild(formattedAuthenticateResponse.render());
+    </script>
 
 </body>
 </html>

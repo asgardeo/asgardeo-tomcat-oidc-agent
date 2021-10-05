@@ -32,8 +32,8 @@
             currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
     final String idToken = sessionContext.getIdToken();
 
-    OIDCAgentConfig configfile = (OIDCAgentConfig) getServletContext().getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
-    String scopes = configfile.getScope().toString();
+    OIDCAgentConfig oidcAgentConfig = (OIDCAgentConfig) getServletContext().getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
+    String scopes = oidcAgentConfig.getScope().toString();
 
     SignedJWT signedJWTIdToken = SignedJWT.parse(idToken);
     String payload = signedJWTIdToken.getJWTClaimsSet().toString();

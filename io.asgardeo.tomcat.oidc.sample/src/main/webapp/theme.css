@@ -155,6 +155,40 @@ code {
     padding: 20px;
 }
 
+.json-formatter-row .json-formatter-string,
+.json-formatter-row .json-formatter-stringifiable {
+    white-space: unset !important;
+}
+
+.json-formatter-dark.json-formatter-row
+.json-formatter-row {
+    line-height: 1.5;
+}
+
+.json-container {
+    background: #272822;
+    padding: 20px;
+    color: white;
+}
+
+.json-formatter-string {
+    color: #fd971f !important;
+}
+
+.json-formatter-key,
+.json-formatter-bracket {
+    color: #f9f8f5 !important;
+    letter-spacing: 0.5px;
+}
+
+.json-formatter-number {
+    color: #cc6633 !important;
+}
+
+.code {
+    line-height: 1.5;
+}
+
 .header-title {
     background-color: #f47421;
     color: #ffffff;

@@ -16,9 +16,10 @@
   ~ under the License.
   --%>
 
-<%@page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
-<%@page import="io.asgardeo.java.oidc.sdk.bean.SessionContext" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.SSOAgentConstants" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.bean.SessionContext" %>
 <%@ page import="io.asgardeo.java.oidc.sdk.bean.User" %>
+<%@ page import="io.asgardeo.java.oidc.sdk.config.model.OIDCAgentConfig" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
@@ -31,6 +32,8 @@
             currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
     final String idToken = sessionContext.getIdToken();
 
+    OIDCAgentConfig configfile = (OIDCAgentConfig) getServletContext().getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
+    String scopes = configfile.getScope().toString();
 
     SignedJWT signedJWTIdToken = SignedJWT.parse(idToken);
     String payload = signedJWTIdToken.getJWTClaimsSet().toString();
@@ -129,8 +132,10 @@
         var header = '<%=header %>';
         var idToken = '<%=idToken %>';
         var name = '<%=name%>';
+        var scope = '<%=scopes%>';
+        const scopeList = scope.split(" ");
         let responses = {
-            "allowedScopes" : "openid",
+            "allowedScopes" : scopeList,
             "username" : name
         }
         var payloadObject = JSON.parse(payload);

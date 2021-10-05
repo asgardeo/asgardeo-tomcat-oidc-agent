@@ -32,8 +32,13 @@
             currentSession.getAttribute(SSOAgentConstants.SESSION_CONTEXT);
     final String idToken = sessionContext.getIdToken();
 
-    OIDCAgentConfig oidcAgentConfig = (OIDCAgentConfig) getServletContext().getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
-    String scopes = oidcAgentConfig.getScope().toString();
+    String scopes = "";
+
+    ServletContext servletContext = getServletContext();
+    if (servletContext.getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME) != null) {
+        OIDCAgentConfig oidcAgentConfig = (OIDCAgentConfig) servletContext.getAttribute(SSOAgentConstants.CONFIG_BEAN_NAME);
+        scopes = oidcAgentConfig.getScope().toString();
+    }
 
     SignedJWT signedJWTIdToken = SignedJWT.parse(idToken);
     String payload = signedJWTIdToken.getJWTClaimsSet().toString();
@@ -41,7 +46,7 @@
 
     String name = null;
     Map<String, Object> customClaimValueMap = new HashMap<>();
-    
+
     if (idToken != null) {
         final User user = sessionContext.getUser();
         customClaimValueMap = user.getAttributes();

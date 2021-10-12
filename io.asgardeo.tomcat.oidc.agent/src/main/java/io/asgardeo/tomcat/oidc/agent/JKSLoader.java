@@ -36,7 +36,7 @@ import javax.servlet.ServletContextListener;
 
 /**
  * JKSLoader is the class for finding the JKS properties and
- * setting them for secure communication with the Identity Server.
+ * setting them for secure communication with the Asgardeo.
  * It is an implementation of the base class, {@link ServletContextListener}.
  *
  * @version 0.1.1

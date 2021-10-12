@@ -38,17 +38,17 @@ The structure of the oidc-sample-app we are configuring would be as follows:
         callBackURL=http://localhost:8080/oidc-sample-app/oauth2client
         scope=openid,address,email,profile
         #grantType=code
-        authorizeEndpoint=https://localhost:9443/oauth2/authorize
-        logoutEndpoint=https://localhost:9443/oidc/logout
-        #sessionIFrameEndpoint=https://localhost:9443/oidc/checksession
-        tokenEndpoint=https://localhost:9443/oauth2/token
-        issuer=https://localhost:9443/oauth2/token
-        jwksEndpoint=https://localhost:9443/oauth2/jwks
+        authorizeEndpoint=https://api.asgardeo.io/t/org_name/oauth2/authorize
+        logoutEndpoint=https://api.asgardeo.io/t/org_name/oidc/logout
+        #sessionIFrameEndpoint=https://api.asgardeo.io/t/org_name/oidc/checksession
+        tokenEndpoint=https://api.asgardeo.io/t/org_name/oauth2/token
+        issuer=https://api.asgardeo.io/t/org_name/oauth2/token
+        jwksEndpoint=https://api.asgardeo.io/t/org_name/oauth2/jwks
         postLogoutRedirectURI=http://localhost:8080/oidc-sample-app/index.html
         trustedAudience=http://localhost:8080/sample-app
         signatureAlgorithm=RS256
       ```
-   These properties are required for the OIDC SDK to communicate with the WSO2 Identity Server.
+   These properties are required for the OIDC SDK to communicate with Asgardeo.
 
 3. Next, we need to find and set JKS properties required for IS server communication.  For that, create a file named jks
    .properties in the resources directory. The content of the jks.properties file should be similar to:
@@ -132,7 +132,7 @@ In the sample we are using, if there is no active session in place, we would red
 
 ### Retrieving user attributes
 
-1. The web app needs to be configured to read the attributes sent from the Identity Server upon successful
+1. The web app needs to be configured to read the attributes sent from Asgardeo upon successful
  authentication. In the oidc-sample-app, we would customize the home.jsp file as follows to retrieve the user attributes.
  
  First, we would need the following imports to be added to the home.jsp file.

@@ -43,7 +43,7 @@ Here we are using Asgardeo as the OpenID Provider.
    
 2. Click on **New Application** and then **Standard Based Application**.
    
-3. Enter any name as the name of the app and add the redirect URL(s) (`http://localhost:8080/oidc-sample-app/oauth2client`)
+3. Enter any name as the name of the app and add the redirect URL(s)
    
 4. Click on Register. You will be navigated to management page of the **sample** application.
    

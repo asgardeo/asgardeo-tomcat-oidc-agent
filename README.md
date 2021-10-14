@@ -43,11 +43,11 @@ Here we are using Asgardeo as the OpenID Provider.
    
 2. Click on **New Application** and then **Standard Based Application**.
    
-3. Enter any name as the name of the app and add the redirect URL(s)
+3. Select OIDC from the selection and enter any name as the name of the app and add the redirect URL(s).
    
-4. Click on Register. You will be navigated to management page of the **sample** application.
+4. Click on Register. You will be navigated to management page of the created application.
    
-5. Add `https://localhost:8080` to **Allowed Origins** under **Protocol** tab and check **Public client** option.
+5. Add `https://localhost:8080` (or whichever the URL your app is hosted on) to **Allowed Origins** under **Protocol** tab and check **Public client** option.
    
 6. Click on **Update** at the bottom.
 

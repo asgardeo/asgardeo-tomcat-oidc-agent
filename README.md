@@ -2,10 +2,10 @@
 
 
 [![Build Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fwso2.org%2Fjenkins%2Fjob%2Fasgardeo%2Fjob%2Fasgardeo-tomcat-oidc-agent%2F&style=flat)](https://wso2.org/jenkins/job/asgardeo/job/asgardeo-tomcat-oidc-agent/)
-[![Stackoverflow](https://img.shields.io/badge/Ask%20for%20help%20on-Stackoverflow-orange)](https://stackoverflow.com/questions/tagged/wso2is)
+[![Stackoverflow](https://img.shields.io/badge/Ask%20for%20help%20on-Stackoverflow-orange)](https://stackoverflow.com/questions/tagged/asgardeo)
 [![Join the chat at https://join.slack.com/t/wso2is/shared_invite/enQtNzk0MTI1OTg5NjM1LTllODZiMTYzMmY0YzljYjdhZGExZWVkZDUxOWVjZDJkZGIzNTE1NDllYWFhM2MyOGFjMDlkYzJjODJhOWQ4YjE](https://img.shields.io/badge/Join%20us%20on-Slack-%23e01563.svg)](https://join.slack.com/t/wso2is/shared_invite/enQtNzk0MTI1OTg5NjM1LTllODZiMTYzMmY0YzljYjdhZGExZWVkZDUxOWVjZDJkZGIzNTE1NDllYWFhM2MyOGFjMDlkYzJjODJhOWQ4YjE)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/wso2/product-is/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/follow/wso2.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=wso2)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/follow/wso2.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=asgardeo)
 ---
 
 The Asgardeo Tomcat OIDC Agent enables you to add OIDC-based login, logout to your Apache Tomcat web apps with
@@ -28,51 +28,42 @@ You can experience the capabilities of Asgardeo Tomcat OIDC Agent by following t
  sections listed below.
 
   * [Prerequisites](#prerequisites)
-  * [Configuring Identity Server](#configuring-identity-server)
-  * [Configuring the sample](#configuring-the-sample)
-  * [Running the sample](#running-the-sample)
+  * [Create an Application in Asgardeo](#1-create-an-application-in-asgardeo)
+  * [Running the sample apps](#2-running-the-sample-apps)
 
 ### Prerequisites
-1. WSO2 Identity Server and its [prerequisites](https://is.docs.wso2.com/en/next/setup/installing-the-product/).
-2. [Apache Tomcat](https://tomcat.apache.org/tomcat-9.0-doc/) 8.x or 9.x.
+- [Apache Tomcat](https://tomcat.apache.org/tomcat-9.0-doc/) 8.x or 9.x.
 > **NOTE**  
 > If you are using Apache Tomcat 10 or a later version, use [this conversion](https://tomcat.apache.org/download-migration.cgi) tool to change the namespaces of the web application. This is necessary because of the namespace changes introduced in Tomcat 10.
 
-### Configuring Identity Server
-Here we are using WSO2 Identity Server as the OpenID Provider. The sample can be configured with any other preferred
- OpenID Provider as well.
- 
-1. Start the WSO2 IS. 
-2. Access WSO2 IS management console and create a service provider (ex:- oidc-sample-app)
-   
-   For the service provider, configure Oauth/OpenID Connect under Inbound Authentication Configuration. In this
-    configuration,
-   use following parameters and options,
-     
-       Callback URL - regexp=(http://localhost:8080/oidc-sample-app/oauth2client|http://localhost:8080/oidc-sample-app/index.html)
+### 1. Create an Application in Asgardeo
+Here we are using Asgardeo as the OpenID Provider.
 
-
-   Keep the other default settings as it is and save the configuration.
+1. Navigate to [**Asgardeo Console**](https://console.asgardeo.io/login) and click on **Applications** under **Develop** tab
    
-   Next, expand the [Claim Configuration](https://is.docs.wso2.com/en/latest/learn/configuring-claims-for-a-service-provider/#configuring-claims-for-a-service-provider) section. In this configuration, Set the following config and add the claims you 
-   need to retrieve (ex: http://wso2.org/claims/lastname) from the web app.
+2. Click on **New Application** and then **Standard Based Application**.
    
-       Select Claim mapping Dialect - Use Local Claim Dialect
-       
-   See the example claim config below.
-   ![Claim Config](https://user-images.githubusercontent.com/15249242/90488235-38d45580-e159-11ea-8beb-52d6b5c35034.png)
+3. Select OIDC from the selection and enter any name as the name of the app and add the redirect URL(s).
+   
+4. Click on Register. You will be navigated to management page of the created application.
+   
+5. Add `https://localhost:8080` (or whichever the URL your app is hosted on) to **Allowed Origins** under **Protocol** tab and check **Public client** option.
+   
+6. Click on **Update** at the bottom.
 
-### Configuring the sample
+### 2. Running the sample apps
 1. Download the [oidc-sample-app.war](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/releases/download/v0.1.4/oidc-sample-app.war).
-2. Update the `consumerKey` and `consumerSecret` values in the `oidc-sample-app.properties` file in `<APP_HOME>/WEB-INF/classes` 
-directory with the `OAuth Client Key` and `OAuth Client Secret` values obtained after configuring an SP in
-Identity Server. Set `indexPage` value to `/oidc-sample-app/index.html`.
+
 2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
 
-### Running the sample
-1. Try out the application by accessing the `http://localhost:8080/oidc-sample-app/index.html`.
+3. Update the `consumerKey`, `consumerSecret`, `callBackURL`, `authorizeEndpoint`, `logoutEndpoint`, `tokenEndpoint`, `issuer` and `jwksEndpoint` values in the `oidc-sample-app.properties` file in `<APP_HOME>/WEB-INF/classes` directory using the value in the Asgardeo Console. These values can be found in the the **Info tab** of the Management settings of the OIDC application you created in Asgardeo.<img alt="Screenshot 2021-10-12 at 19 21 55" src="https://user-images.githubusercontent.com/42619922/136969300-1b811573-d80b-4c31-b028-95f983765643.png">
+5. Restart the Tomcat server to allow the changes.
+6. Try out the application by accessing the `http://localhost:8080/oidc-sample-app/index.html`.
+
+![Screen Recording 2021-10-12 at 19 19 13](https://user-images.githubusercontent.com/42619922/136969578-5e5bbfa6-fe20-4fcb-bd77-6e0ffdb68e91.gif)
+
  
-![Recordit GIF](https://user-images.githubusercontent.com/25479743/99786157-28f75380-2b44-11eb-97e1-4f505841ac26.gif)
+
 
 ## How it works
 
@@ -111,7 +102,7 @@ In the **index.html** page of the oidc-sample-app, the login button would send a
 
 ### Retrieve user attributes
 
-The web app needs to be configured to read the attributes sent from the Identity Server upon successful
+The web app needs to be configured to read the attributes sent from Asgardeo upon successful
  authentication. In the oidc-sample-app, we would customize the home.jsp file as follows to retrieve the user
   attributes.
  

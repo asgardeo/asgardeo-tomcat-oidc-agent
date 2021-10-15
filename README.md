@@ -28,7 +28,7 @@ You can experience the capabilities of Asgardeo Tomcat OIDC Agent by following t
  sections listed below.
 
   * [Prerequisites](#prerequisites)
-  * [Create Application in Asgardeo](#1-create-application-in-asgardeo)
+  * [Create an Application in Asgardeo](#1-create-an-application-in-asgardeo)
   * [Running the sample apps](#2-running-the-sample-apps)
 
 ### Prerequisites
@@ -36,7 +36,7 @@ You can experience the capabilities of Asgardeo Tomcat OIDC Agent by following t
 > **NOTE**  
 > If you are using Apache Tomcat 10 or a later version, use [this conversion](https://tomcat.apache.org/download-migration.cgi) tool to change the namespaces of the web application. This is necessary because of the namespace changes introduced in Tomcat 10.
 
-### 1. Create Application in Asgardeo
+### 1. Create an Application in Asgardeo
 Here we are using Asgardeo as the OpenID Provider.
 
 1. Navigate to [**Asgardeo Console**](https://console.asgardeo.io/login) and click on **Applications** under **Develop** tab

@@ -30,7 +30,7 @@
     </modules>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tomcat-oidc-agent</artifactId>
-    <version>0.1.19</version>
+    <version>0.1.20-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Asgardeo - Tomcat OIDC Agent Parent Module</name>
     <description>
@@ -42,7 +42,7 @@
         <url>https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</url>
         <developerConnection>scm:git:https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</developerConnection>
         <connection>scm:git:https://github.com/asgardeo/asgardeo-tomcat-oidc-agent.git</connection>
-        <tag>v0.1.19</tag>
+        <tag>HEAD</tag>
     </scm>
 
 

@@ -21,10 +21,12 @@ package io.asgardeo.tomcat.oidc.agent;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import io.asgardeo.java.oidc.sdk.HTTPSessionBasedOIDCProcessor;
 import io.asgardeo.java.oidc.sdk.SSOAgentConstants;
+import io.asgardeo.java.oidc.sdk.bean.RequestContext;
 import io.asgardeo.java.oidc.sdk.bean.SessionContext;
 import io.asgardeo.java.oidc.sdk.config.model.OIDCAgentConfig;
 import io.asgardeo.java.oidc.sdk.exception.SSOAgentClientException;
 import io.asgardeo.java.oidc.sdk.exception.SSOAgentException;
+import io.asgardeo.java.oidc.sdk.exception.SSOAgentServerException;
 import io.asgardeo.java.oidc.sdk.request.OIDCRequestResolver;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -106,6 +108,7 @@ public class OIDCAgentFilter implements Filter {
         }
 
         if (requestResolver.isCallbackResponse()) {
+            RequestContext requestContext = getRequestContext(request);
             try {
                 oidcManager.handleOIDCCallback(request, response);
             } catch (SSOAgentException e) {
@@ -117,7 +120,8 @@ public class OIDCAgentFilter implements Filter {
                 response.sendRedirect(oidcAgentConfig.getIndexPage());
                 return;
             }
-            response.sendRedirect("home.jsp");
+            String homePage = resolveTargetPage(requestContext);
+            response.sendRedirect(homePage);
             return;
         }
 
@@ -130,6 +134,29 @@ public class OIDCAgentFilter implements Filter {
         } else {
             filterChain.doFilter(request, response);
         }
+    }
+
+    private String resolveTargetPage(RequestContext requestContext) {
+
+        String targetPage = "home.jsp";
+        if (StringUtils.isNotBlank(oidcAgentConfig.getHomePage())) {
+            targetPage = oidcAgentConfig.getHomePage();
+        } else if (requestContext != null) {
+            if (requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY) != null) {
+                targetPage = requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY).toString();
+            }
+        }
+        return targetPage;
+    }
+
+    private RequestContext getRequestContext(HttpServletRequest request) throws SSOAgentServerException {
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null && session.getAttribute(SSOAgentConstants.REQUEST_CONTEXT) != null) {
+            return (RequestContext) request.getSession(false).getAttribute(SSOAgentConstants.REQUEST_CONTEXT);
+        }
+        throw new SSOAgentServerException("Request context null.");
     }
 
     @Override

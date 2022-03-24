@@ -182,8 +182,8 @@ errorPage=/error.jsp
 
 **Property Name:** `homePage`
 
-**Description:** This may denote the URI for the home page of the webapp. In case there are multiple pages in the 
-application and the user should be always redirected to a specific page after successful authentication this parameter can be configured.
+**Description:** This may denote the URI for the home page of the webapp. This parameter can be configured to specify 
+the page that the user would always be redirected to, after successful authentication.
 
 
 **Sample:**

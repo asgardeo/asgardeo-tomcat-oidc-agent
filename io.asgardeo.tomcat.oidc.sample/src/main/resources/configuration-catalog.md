@@ -177,3 +177,17 @@ indexPage=/oidc-sample-app/index.html
 ```
 errorPage=/error.jsp
 ```
+
+### Home Page
+
+**Property Name:** `homePage`
+
+**Description:** This may denote the URI for the home page of the webapp. This parameter can be configured to specify 
+the page that the user would always be redirected to, after successful authentication.
+
+
+**Sample:**
+
+```
+homePage=home.jsp
+```

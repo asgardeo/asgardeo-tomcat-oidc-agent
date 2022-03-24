@@ -50,6 +50,13 @@ The structure of the oidc-sample-app we are configuring would be as follows:
       ```
    These properties are required for the OIDC SDK to communicate with Asgardeo.
 
+    ```
+    If you have a multi page application and want to redirect users to a specific page(eg:myApp.jsp) after successful 
+    authentication you can add the following property to the oidc-sample-app.properties file.
+   
+    homePage=myApp.jsp
+   ```
+
 3. Next, we need to find and set JKS properties required for IS server communication.  For that, create a file named jks
    .properties in the resources directory. The content of the jks.properties file should be similar to:
    

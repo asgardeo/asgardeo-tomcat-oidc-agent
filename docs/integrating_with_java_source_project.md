@@ -31,7 +31,7 @@ The structure of the sample would be as follows:
       <dependency>
           <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
           <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
-          <version>0.1.20</version>
+          <version>0.1.21</version>
       </dependency>
       ```
 

@@ -52,7 +52,7 @@ Here we are using Asgardeo as the OpenID Provider.
 6. Click on **Update** at the bottom.
 
 ### 2. Running the sample apps
-1. Download the [oidc-sample-app.war](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/releases/download/v0.1.4/oidc-sample-app.war).
+1. Download the [oidc-sample-app.war](https://github.com/asgardeo/asgardeo-tomcat-oidc-agent/releases/download/v0.1.21/oidc-sample-app.war).
 
 2. Deploy the application, `oidc-sample-app.war` using Apache Tomcat.
 

@@ -114,6 +114,19 @@ issuer=https://localhost:9443/oauth2/token
 jwksEndpoint=https://localhost:9443/oauth2/jwks
 ```
 
+
+### Logout URL
+
+**Property Name:** `logoutURL`
+
+**Description:** This is the URL to which the user will be directed upon a logout request.
+
+**Sample:**
+
+```
+logoutURL=logout
+```
+
 ## Conditional Parameters
 ### Trusted Audience
 **Property Name:** `trustedAudience`
@@ -191,3 +204,67 @@ the page that the user would always be redirected to, after successful authentic
 ```
 homePage=home.jsp
 ```
+
+### Post Logout Redirect URI
+
+**Property Name:** `postLogoutRedirectURI`
+
+**Description:** This is the URI to which the user will be returned upon successfully signing out from the OpenID Provider. If not configured, the callbackURL will be used instead.
+
+
+**Sample:**
+
+```
+postLogoutRedirectURI=http://localhost:8080/oidc-sample-app/oauth2client
+```
+
+### HTTP Connect Timeout
+
+**Property Name:** `httpConnectTimeout`
+
+**Description:** This parameter denotes the timeout in milliseconds for establishing the connection to the OpenID Provider. 2000 ms (2 seconds) by default.
+
+**Sample:**
+
+```
+httpConnectTimeout=2000
+```
+
+### HTTP Read Timeout
+
+**Property Name:** `httpReadTimeout`
+
+**Description:** This parameter denotes the timeout in milliseconds for reading data received from the OpenID Provider. 2000 ms (2 seconds) by default.
+
+**Sample:**
+
+```
+httpReadTimeout=2000
+```
+
+### HTTP Size Limit
+
+**Property Name:** `httpSizeLimit`
+
+**Description:** This parameter denotes the HTTP entity size limit in bytes. 51200 bytes (50 KBytes) by default.
+
+**Sample:**
+
+```
+httpSizeLimit=51200
+```
+
+### State
+
+**Property Name:** `state`
+
+**Description:** This parameter may denote an opaque value which can be used to maintain state between the request and the callback. This can be used to prevent cross-site request forgery (CSRF). Null by default.
+
+### Additional Parameters for Authorize Endpoint
+
+**Property Name:** `additionalParamsForAuthorizeEndpoint` 
+
+**Description:** This parameter may denote the additional query parameters of the OpenID Provider.
+
+
+

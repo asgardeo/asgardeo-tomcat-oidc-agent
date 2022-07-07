@@ -119,7 +119,7 @@ jwksEndpoint=https://localhost:9443/oauth2/jwks
 
 **Property Name:** `logoutURL`
 
-**Description:** This is the URL to which the user will be directed upon a logout request.
+**Description:** This is the URL that denotes the logout endpoint for the application.
 
 **Sample:**
 
@@ -209,7 +209,7 @@ homePage=home.jsp
 
 **Property Name:** `postLogoutRedirectURI`
 
-**Description:** This is the URI to which the user will be returned upon successfully signing out from the OpenID Provider. If not configured, the callbackURL will be used instead.
+**Description:** This is the URI to which the user will be returned to upon successfully signing out from the OpenID Provider. If not configured, the callbackURL will be used instead.
 
 
 **Sample:**
@@ -234,7 +234,7 @@ httpConnectTimeout=2000
 
 **Property Name:** `httpReadTimeout`
 
-**Description:** This parameter denotes the timeout in milliseconds for reading data received from the OpenID Provider. 2000 ms (2 seconds) by default.
+**Description:** This parameter denotes the timeout in milliseconds for reading the data received from the OpenID Provider. 2000 ms (2 seconds) by default.
 
 **Sample:**
 
@@ -258,13 +258,13 @@ httpSizeLimit=51200
 
 **Property Name:** `state`
 
-**Description:** This parameter may denote an opaque value which can be used to maintain state between the request and the callback. This can be used to prevent cross-site request forgery (CSRF). Null by default.
+**Description:** This parameter may denote an opaque value which can be used to maintain the state between the request and the callback. This can be used to prevent cross-site request forgery (CSRF) attacks. Null by default.
 
 ### Additional Parameters for Authorize Endpoint
 
 **Property Name:** `additionalParamsForAuthorizeEndpoint` 
 
-**Description:** This parameter may denote the additional query parameters of the OpenID Provider.
+**Description:** This parameter denotes the additional query parameters that required to be sent to the OpenID Provider.
 
 
 

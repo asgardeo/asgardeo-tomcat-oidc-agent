@@ -258,7 +258,7 @@ httpSizeLimit=51200
 
 **Property Name:** `state`
 
-**Description:** This parameter may denote an opaque value which can be used to maintain the state between the request and the callback. This can be used to prevent cross-site request forgery (CSRF) attacks. Null by default.
+**Description:** This parameter denotes an opaque value which can be used to maintain the state between the request and the callback. This can also be used to prevent cross-site request forgery (CSRF) attacks. A random UUID is assigned by default.
 
 ### Additional Parameters for Authorize Endpoint
 

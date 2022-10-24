@@ -109,6 +109,11 @@ public class OIDCAgentFilter implements Filter {
 
         if (requestResolver.isCallbackResponse()) {
             RequestContext requestContext = getRequestContext(request);
+            if (requestContext == null) {
+                handleException(request, response, new SSOAgentServerException("Request context is null."));
+                return;
+            }
+
             try {
                 oidcManager.handleOIDCCallback(request, response);
             } catch (SSOAgentException e) {
@@ -120,7 +125,7 @@ public class OIDCAgentFilter implements Filter {
                 response.sendRedirect(oidcAgentConfig.getIndexPage());
                 return;
             }
-            String homePage = resolveTargetPage(requestContext);
+            String homePage = resolveTargetPage(request, requestContext);
             response.sendRedirect(homePage);
             return;
         }
@@ -136,27 +141,32 @@ public class OIDCAgentFilter implements Filter {
         }
     }
 
-    private String resolveTargetPage(RequestContext requestContext) {
+    private String resolveTargetPage(HttpServletRequest request, RequestContext requestContext) {
 
-        String targetPage = "home.jsp";
+        String targetPage = "";
         if (StringUtils.isNotBlank(oidcAgentConfig.getHomePage())) {
             targetPage = oidcAgentConfig.getHomePage();
-        } else if (requestContext != null) {
-            if (requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY) != null) {
-                targetPage = requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY).toString();
-            }
+        } else if (requestContext != null && StringUtils.isNotBlank((CharSequence) requestContext.getParameter(
+                SSOAgentConstants.REDIRECT_URI_KEY))) {
+            targetPage = requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY).toString();
+        } else if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
+            targetPage = oidcAgentConfig.getIndexPage();
+        }  else {
+            String requestUrl = request.getRequestURL().toString();
+            targetPage = requestUrl.substring(0, requestUrl.length() - request.getServletPath().length());
         }
+
         return targetPage;
     }
 
-    private RequestContext getRequestContext(HttpServletRequest request) throws SSOAgentServerException {
+    private RequestContext getRequestContext(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute(SSOAgentConstants.REQUEST_CONTEXT) != null) {
             return (RequestContext) request.getSession(false).getAttribute(SSOAgentConstants.REQUEST_CONTEXT);
         }
-        throw new SSOAgentServerException("Request context null.");
+        return null;
     }
 
     @Override

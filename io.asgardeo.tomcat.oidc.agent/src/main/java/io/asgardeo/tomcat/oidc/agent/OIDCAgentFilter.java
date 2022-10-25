@@ -125,10 +125,16 @@ public class OIDCAgentFilter implements Filter {
                 response.sendRedirect(oidcAgentConfig.getIndexPage());
                 return;
             }
+
             String homePage = resolveTargetPage(request, requestContext);
             if (logger.isDebugEnabled()) {
                 logger.debug("Redirection home page is set to " + homePage);
             }
+            if (StringUtils.isBlank(homePage)) {
+                handleException(request, response, new SSOAgentClientException("Redirection target is null."));
+                return;
+            }
+
             response.sendRedirect(homePage);
             return;
         }

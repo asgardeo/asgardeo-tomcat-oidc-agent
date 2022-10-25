@@ -126,6 +126,9 @@ public class OIDCAgentFilter implements Filter {
                 return;
             }
             String homePage = resolveTargetPage(request, requestContext);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Redirection home page is set to " + homePage);
+            }
             response.sendRedirect(homePage);
             return;
         }
@@ -143,20 +146,20 @@ public class OIDCAgentFilter implements Filter {
 
     private String resolveTargetPage(HttpServletRequest request, RequestContext requestContext) {
 
-        String targetPage = "";
         if (StringUtils.isNotBlank(oidcAgentConfig.getHomePage())) {
-            targetPage = oidcAgentConfig.getHomePage();
-        } else if (requestContext != null && StringUtils.isNotBlank((CharSequence) requestContext.getParameter(
+            return oidcAgentConfig.getHomePage();
+        }
+        if (requestContext != null && StringUtils.isNotBlank((CharSequence) requestContext.getParameter(
                 SSOAgentConstants.REDIRECT_URI_KEY))) {
-            targetPage = requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY).toString();
-        } else if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
-            targetPage = oidcAgentConfig.getIndexPage();
-        }  else {
-            String requestUrl = request.getRequestURL().toString();
-            targetPage = requestUrl.substring(0, requestUrl.length() - request.getServletPath().length());
+            return requestContext.getParameter(SSOAgentConstants.REDIRECT_URI_KEY).toString();
+        }
+        if (StringUtils.isNotBlank(oidcAgentConfig.getIndexPage())) {
+            return oidcAgentConfig.getIndexPage();
         }
 
-        return targetPage;
+        // If all the checks fail, set root path as the target page.
+        String requestUrl = request.getRequestURL().toString();
+        return requestUrl.substring(0, requestUrl.length() - request.getServletPath().length());
     }
 
     private RequestContext getRequestContext(HttpServletRequest request) {

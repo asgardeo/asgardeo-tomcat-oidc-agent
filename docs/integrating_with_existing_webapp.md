@@ -105,14 +105,6 @@ The structure of the oidc-sample-app we are configuring would be as follows:
                 <param-name>app-property-file</param-name>
                 <param-value>oidc-sample-app.properties</param-value>
             </context-param>
-        
-            <listener>
-                <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
-            </listener>
-            <context-param>
-                <param-name>jks-property-file</param-name>
-                <param-value>jks.properties</param-value>
-            </context-param>
         </web-app>
 
       ```

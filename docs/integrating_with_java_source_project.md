@@ -112,14 +112,6 @@ A comprehensive list of the properties can be found in the [Configuration Catalo
              <param-name>app-property-file</param-name>
              <param-value>oidc-sample-app.properties</param-value>
          </context-param>
-     
-         <listener>
-             <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
-         </listener>
-         <context-param>
-             <param-name>jks-property-file</param-name>
-             <param-value>jks.properties</param-value>
-         </context-param>
      </web-app>
    ```
 ### Enable login    

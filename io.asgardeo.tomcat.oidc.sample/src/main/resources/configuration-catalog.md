@@ -224,6 +224,9 @@ postLogoutRedirectURI=http://localhost:8080/oidc-sample-app/oauth2client
 
 **Description:** This parameter denotes the timeout in milliseconds for establishing the connection to the OpenID Provider. 2000 ms (2 seconds) by default.
 
+> **Note**
+> You may need to adjust this value based on the network latency and the response time of the OpenID Provider.
+
 **Sample:**
 
 ```
@@ -235,6 +238,9 @@ httpConnectTimeout=2000
 **Property Name:** `httpReadTimeout`
 
 **Description:** This parameter denotes the timeout in milliseconds for reading the data received from the OpenID Provider. 2000 ms (2 seconds) by default.
+
+> **Note**
+> You may need to adjust this value based on the network latency and the response time of the OpenID Provider.
 
 **Sample:**
 

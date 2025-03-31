@@ -31,7 +31,7 @@ The structure of the sample would be as follows:
       <dependency>
           <groupId>io.asgardeo.tomcat.oidc.agent</groupId>
           <artifactId>io.asgardeo.tomcat.oidc.agent</artifactId>
-          <version>0.1.28</version>
+          <version>0.1.31</version>
       </dependency>
       ```
 
@@ -111,14 +111,6 @@ A comprehensive list of the properties can be found in the [Configuration Catalo
          <context-param>
              <param-name>app-property-file</param-name>
              <param-value>oidc-sample-app.properties</param-value>
-         </context-param>
-     
-         <listener>
-             <listener-class>io.asgardeo.tomcat.oidc.agent.JKSLoader</listener-class>
-         </listener>
-         <context-param>
-             <param-name>jks-property-file</param-name>
-             <param-value>jks.properties</param-value>
          </context-param>
      </web-app>
    ```
